@@ -20,6 +20,24 @@ button { color: inherit; font: inherit; }
 code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
 .shell { width: min(1200px, calc(100% - 44px)); margin: 0 auto; }
 
+.atlas-locked { overflow: hidden; }
+.atlas-locked #atlas-content { visibility: hidden; }
+.atlas-unlocked .access-gate, .access-gate[hidden] { display: none; }
+.access-gate { position: fixed; z-index: 1000; inset: 0; display: grid; place-items: center; padding: 24px; color: #faf9f4; background: radial-gradient(circle at 74% 18%, rgba(184,239,121,.2), transparent 28%), radial-gradient(circle at 18% 90%, rgba(104,167,255,.12), transparent 30%), linear-gradient(137deg, #102b22 0%, #163a2b 56%, #091c16 100%); }
+.access-card { width: min(560px, 100%); padding: clamp(30px, 6vw, 54px); border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.055); box-shadow: 0 30px 90px rgba(0,0,0,.24); backdrop-filter: blur(12px); }
+.access-brand { margin: 0 0 70px; font-size: 12px; font-weight: 850; letter-spacing: .13em; }
+.access-brand span { color: var(--lime); }
+.access-brand b { margin-left: 8px; padding: 4px 7px; color: #143025; background: var(--lime); border-radius: 99px; font-size: 9px; }
+.access-kicker { margin: 0 0 14px; color: var(--orange); font-size: 10px; font-weight: 850; letter-spacing: .19em; }
+.access-card h1 { margin: 0; font: 500 clamp(35px, 8vw, 52px)/1.08 Georgia, "Noto Serif SC", serif; letter-spacing: -.035em; }
+.access-copy { margin: 22px 0 30px; color: rgba(255,255,255,.62); font-size: 13px; line-height: 1.75; }
+.access-card label { display: block; margin-bottom: 9px; color: rgba(255,255,255,.5); font-size: 10px; font-weight: 750; letter-spacing: .08em; }
+.access-input-row { display: grid; grid-template-columns: 1fr auto; }
+.access-input-row input { min-width: 0; padding: 14px 15px; color: #fff; border: 1px solid rgba(255,255,255,.22); border-right: 0; border-radius: 0; outline: 0; background: rgba(0,0,0,.16); font: 14px ui-monospace, monospace; }
+.access-input-row input:focus { border-color: var(--lime); box-shadow: inset 0 0 0 1px var(--lime); }
+.access-input-row button { padding: 0 18px; color: #10261d; border: 1px solid var(--lime); background: var(--lime); cursor: pointer; font-size: 12px; font-weight: 800; }
+.access-error { min-height: 18px; margin: 10px 0 0; color: #ff9a74; font-size: 11px; }
+
 .hero { min-height: 760px; color: #faf9f4; overflow: hidden; background: radial-gradient(circle at 76% 14%, rgba(184,239,121,.22), transparent 27%), radial-gradient(circle at 20% 100%, rgba(104,167,255,.12), transparent 30%), linear-gradient(137deg, #102b22 0%, #163a2b 56%, #091c16 100%); }
 .nav { height: 78px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.14); }
 .brand { font-size: 13px; font-weight: 850; letter-spacing: .13em; }
@@ -188,4 +206,8 @@ footer a { color: var(--lime); }
   .case-question, .case-summary { min-height: auto; }
   .next-step { grid-template-columns: 1fr; }
   footer .shell { flex-direction: column; }
+  .access-brand { margin-bottom: 48px; }
+  .access-input-row { grid-template-columns: 1fr; gap: 9px; }
+  .access-input-row input { border-right: 1px solid rgba(255,255,255,.22); }
+  .access-input-row button { min-height: 46px; }
 }

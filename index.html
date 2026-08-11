@@ -5,9 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Polymarket P1B 多尺度数据、轨迹分布、代表案例与 Track A 样本审计。">
   <title>Polymarket Data Atlas v1</title>
+  <script>document.documentElement.classList.add("atlas-locked");</script>
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
+  <section class="access-gate" id="access-gate" role="dialog" aria-modal="true" aria-labelledby="access-title">
+    <div class="access-card">
+      <p class="access-brand">ECON<span>WM</span> / DATA ATLAS <b>V1</b></p>
+      <p class="access-kicker">COLLABORATOR ACCESS</p>
+      <h1 id="access-title">请输入访问口令</h1>
+      <p class="access-copy">该页面用于 Economic World Model 项目协作。验证后，本浏览器会话将保持解锁。</p>
+      <form id="access-form">
+        <label for="access-password">访问口令</label>
+        <div class="access-input-row">
+          <input id="access-password" name="password" type="password" autocomplete="current-password" required autofocus>
+          <button type="submit">进入 Atlas</button>
+        </div>
+        <p class="access-error" id="access-error" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <div id="atlas-content" inert aria-hidden="true">
   <header class="hero" id="top">
     <nav class="nav shell" aria-label="页面导航">
       <a class="brand" href="#top">ECON<span>WM</span> / DATA ATLAS <b>V1</b></a>
@@ -165,6 +184,8 @@
   </main>
 
   <footer><div class="shell"><span>Economic World Model × Polymarket</span><span>Data Atlas v1 · Public static release</span><a href="#top">返回顶部 ↑</a></div></footer>
+  </div>
+  <script src="assets/access.js"></script>
   <script src="data/atlas.js"></script>
   <script src="assets/app.js"></script>
 </body>
