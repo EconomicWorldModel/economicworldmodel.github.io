@@ -12,7 +12,7 @@ Data Atlas v1 是当前 Polymarket 数据审计的公开网页与离线入口。
 
 公开地址：
 
-https://sc-levi.github.io/econ-wm-data-atlas/
+https://economicworldmodel.github.io/
 
 网页入口设有前端协作口令，并在当前浏览器会话中保持解锁。该口令只限制普通浏览流程；
 由于站点仍由公开的 GitHub Pages 静态托管，网页源码和紧凑数据载荷仍可被直接访问。
