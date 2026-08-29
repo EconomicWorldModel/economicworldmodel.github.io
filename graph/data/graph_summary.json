@@ -1,0 +1,242 @@
+{
+  "generated_at": "2026-08-29T15:33:24.662983+00:00",
+  "scope": "deterministic 500-record training audit sample",
+  "records": {
+    "sampled": 500,
+    "canonical": 460,
+    "merged": 40
+  },
+  "static_graph": {
+    "cofluctuation_edges": 62272,
+    "dtw_edges": 920,
+    "density": 0.5898645448517571,
+    "connected_components": 5,
+    "degree_min": 0,
+    "degree_median": 277.5,
+    "degree_mean": 270.74782608695654,
+    "degree_max": 393
+  },
+  "time_audit": {
+    "cross_event_edges": 62020,
+    "zero_overlap": 57727,
+    "any_overlap": 4293,
+    "full_17_day_overlap": 109,
+    "zero_overlap_fraction": 0.9307803934214769,
+    "exact_calendar_nodes": 180,
+    "exact_calendar_components": 79
+  },
+  "event_candidate_subset": {
+    "unique_event_pairs": 1225,
+    "unique_events": 1132,
+    "connected_components": 286,
+    "illustrated_pairs": 40,
+    "review_status": "all unreviewed",
+    "selection_rule": {
+      "peak_local_abs_corr_min": 0.9,
+      "high_corr_window_count_min": 3,
+      "high_corr_window_fraction_min": 0.1,
+      "full_period_abs_corr_min": 0.5,
+      "semantic_score_min": 0.25,
+      "actual_trade_days_each_min": 3
+    }
+  },
+  "temporal_edge_snapshots": {
+    "dataset_version": "polymarket-edge-snapshots-v1",
+    "status": "materialized_daily_edge_observations",
+    "candidate_universe_time": "2025-07-31T23:59:59+00:00",
+    "candidate_pair_count": 1225,
+    "candidate_market_count": 1132,
+    "maximum_source_bar_time": "2026-05-04T16:00:00+00:00",
+    "last_complete_evidence_date": "2026-05-03T00:00:00+00:00",
+    "snapshot_start": "2025-08-01T00:00:00+00:00",
+    "snapshot_end": "2026-05-04T00:00:00+00:00",
+    "partition_count": 277,
+    "observation_row_count": 5162,
+    "active_edge_observation_count": 3463,
+    "active_unique_market_pair_count": 86,
+    "active_snapshot_count": 264,
+    "daily_state_row_count": 105045,
+    "daily_state_market_count": 1132,
+    "total_bytes": 3140309,
+    "protocol": {
+      "candidate_universe": "1,225 review-priority event pairs frozen at the train cutoff",
+      "snapshot_frequency": "daily UTC",
+      "evidence_days": 17,
+      "local_window_days": 7,
+      "support_threshold": 0.7,
+      "active_peak_threshold": 0.7,
+      "active_support_windows": 1,
+      "min_actual_days_for_support": 3,
+      "min_actual_days_for_active": 3,
+      "max_staleness_days": 3,
+      "max_lag_days": 3,
+      "availability_rule": "snapshot_time = available_from = evidence_end + 1 UTC day, and not before candidate universe cutoff"
+    },
+    "limitations": [
+      "rows are temporal correlation observations, not P3 predictive-increment or causal labels",
+      "the candidate universe was selected at the train cutoff, so no pre-cutoff snapshot is emitted",
+      "representative market pairs stand in for event pairs; proposition-compatible expansion remains pending",
+      "the final partial UTC day in the source bars is excluded by default",
+      "absent pair rows mean insufficient aligned evidence, not a measured zero correlation"
+    ],
+    "files": {
+      "edge_snapshots": "edge_snapshots/snapshot_date=YYYY-MM-DD/part.parquet",
+      "snapshot_manifest": "snapshot_manifest.parquet",
+      "candidate_universe": "candidate_universe.parquet",
+      "daily_market_states": "daily_market_states.parquet",
+      "schema": "schema.json",
+      "duckdb_queries": "queries.sql"
+    }
+  },
+  "top_exact_calendar_edges": [
+    {
+      "source_sample_id": "A_D-515888-20250124T0000Z",
+      "target_sample_id": "A_D-509357-20250124T0000Z",
+      "source_question": "Will the CDU/CSU win 30-35% of the vote in the German election?",
+      "target_question": "Will Kevin Durant lead the NBA in scoring?",
+      "source_as_of_time": "2025-01-24 00:00:00+00:00",
+      "target_as_of_time": "2025-01-24 00:00:00+00:00",
+      "calendar_overlap_days": 17,
+      "peak_local_signed_corr": 0.9722718241315026,
+      "lag": -2,
+      "lag_abs_corr": 0.4020656544194272
+    },
+    {
+      "source_sample_id": "A_D-593914-20250923T0000Z",
+      "target_sample_id": "A_D-592190-20250923T0000Z",
+      "source_question": "Will Elon Musk be richest person on September 30?",
+      "target_question": "Russian strike on Poland by September 30?",
+      "source_as_of_time": "2025-09-23 00:00:00+00:00",
+      "target_as_of_time": "2025-09-23 00:00:00+00:00",
+      "calendar_overlap_days": 17,
+      "peak_local_signed_corr": -0.9631225003728537,
+      "lag": 0,
+      "lag_abs_corr": 0.9460658830532125
+    },
+    {
+      "source_sample_id": "A_D-516785-20250301T0000Z",
+      "target_sample_id": "A_D-511518-20250301T0000Z",
+      "source_question": "Will Andrew Cuomo win the Democratic Primary for Mayor of New York City?",
+      "target_question": "Trump declassifies UFO files in first 100 days?",
+      "source_as_of_time": "2025-03-01 00:00:00+00:00",
+      "target_as_of_time": "2025-03-01 00:00:00+00:00",
+      "calendar_overlap_days": 17,
+      "peak_local_signed_corr": -0.9620950365366805,
+      "lag": -3,
+      "lag_abs_corr": 0.6882498808830204
+    },
+    {
+      "source_sample_id": "A_D-534899-20250419T0000Z",
+      "target_sample_id": "A_D-519846-20250419T0000Z",
+      "source_question": "Will the US add less than 50k jobs in April?",
+      "target_question": "Will Trump meet with Mohammed bin Salman in his first 100 days?",
+      "source_as_of_time": "2025-04-19 00:00:00+00:00",
+      "target_as_of_time": "2025-04-19 00:00:00+00:00",
+      "calendar_overlap_days": 17,
+      "peak_local_signed_corr": -0.9620099630282716,
+      "lag": -3,
+      "lag_abs_corr": 0.790060723164149
+    },
+    {
+      "source_sample_id": "A_D-511541-20241119T0000Z",
+      "target_sample_id": "A_D-510925-20241119T0000Z",
+      "source_question": "Will Solana reach $130 in November?",
+      "target_question": "Will Harris win New Mexico by 6+ points?",
+      "source_as_of_time": "2024-11-19 00:00:00+00:00",
+      "target_as_of_time": "2024-11-19 00:00:00+00:00",
+      "calendar_overlap_days": 17,
+      "peak_local_signed_corr": -0.9586233555098721,
+      "lag": -3,
+      "lag_abs_corr": 0.7773514372910353
+    },
+    {
+      "source_sample_id": "A_D-509190-20241119T0000Z",
+      "target_sample_id": "A_D-510925-20241119T0000Z",
+      "source_question": "Will the Republican candidate win North Carolina by 4.0% or more? ",
+      "target_question": "Will Harris win New Mexico by 6+ points?",
+      "source_as_of_time": "2024-11-19 00:00:00+00:00",
+      "target_as_of_time": "2024-11-19 00:00:00+00:00",
+      "calendar_overlap_days": 17,
+      "peak_local_signed_corr": 0.957602303836392,
+      "lag": -3,
+      "lag_abs_corr": 0.6581122153699691
+    },
+    {
+      "source_sample_id": "A_D-529273-20250401T0000Z",
+      "target_sample_id": "A_D-529046-20250401T0000Z",
+      "source_question": "Liberals win majority in Canadian election?",
+      "target_question": "Will Barcelona win the treble?",
+      "source_as_of_time": "2025-04-01 00:00:00+00:00",
+      "target_as_of_time": "2025-04-01 00:00:00+00:00",
+      "calendar_overlap_days": 17,
+      "peak_local_signed_corr": 0.9573028896688354,
+      "lag": -1,
+      "lag_abs_corr": 0.7099574936479349
+    },
+    {
+      "source_sample_id": "A_D-540621-20250515T0000Z",
+      "target_sample_id": "A_D-541622-20250515T0000Z",
+      "source_question": "Will Tesla name a new CEO before July? ",
+      "target_question": "Will José Antonio Kast win the Chilean presidential election?",
+      "source_as_of_time": "2025-05-15 00:00:00+00:00",
+      "target_as_of_time": "2025-05-15 00:00:00+00:00",
+      "calendar_overlap_days": 17,
+      "peak_local_signed_corr": -0.9519395826175832,
+      "lag": -2,
+      "lag_abs_corr": 0.7325990971874025
+    },
+    {
+      "source_sample_id": "A_D-500631-20240629T0000Z",
+      "target_sample_id": "A_D-500792-20240629T0000Z",
+      "source_question": "2024 Balance of Power: R Prez R Senate R House",
+      "target_question": "Will Shark Cat reach $1b first?",
+      "source_as_of_time": "2024-06-29 00:00:00+00:00",
+      "target_as_of_time": "2024-06-29 00:00:00+00:00",
+      "calendar_overlap_days": 17,
+      "peak_local_signed_corr": -0.9488774748305346,
+      "lag": -2,
+      "lag_abs_corr": 0.6801084885815977
+    },
+    {
+      "source_sample_id": "A_D-518866-20250412T0000Z",
+      "target_sample_id": "A_D-519065-20250412T0000Z",
+      "source_question": "Will Donald Trump visit Saudi Arabia in 2025?",
+      "target_question": "Will Călin Georgescu win the Romanian presidential election?",
+      "source_as_of_time": "2025-04-12 00:00:00+00:00",
+      "target_as_of_time": "2025-04-12 00:00:00+00:00",
+      "calendar_overlap_days": 17,
+      "peak_local_signed_corr": -0.9458495279880161,
+      "lag": -2,
+      "lag_abs_corr": 0.5767325311975596
+    },
+    {
+      "source_sample_id": "A_D-540733-20250519T0000Z",
+      "target_sample_id": "A_D-540403-20250519T0000Z",
+      "source_question": "Will John Mulaney actually fight children?",
+      "target_question": "Will Bitcoin reach $125k in May?",
+      "source_as_of_time": "2025-05-19 00:00:00+00:00",
+      "target_as_of_time": "2025-05-19 00:00:00+00:00",
+      "calendar_overlap_days": 17,
+      "peak_local_signed_corr": 0.9457137026063946,
+      "lag": 2,
+      "lag_abs_corr": 0.44919182545643305
+    },
+    {
+      "source_sample_id": "A_D-555753-20250717T0000Z",
+      "target_sample_id": "A_D-516720-20250717T0000Z",
+      "source_question": "1,350+ Measles cases in U.S. before August?",
+      "target_question": "Putin out as President of Russia in 2025?",
+      "source_as_of_time": "2025-07-17 00:00:00+00:00",
+      "target_as_of_time": "2025-07-17 00:00:00+00:00",
+      "calendar_overlap_days": 17,
+      "peak_local_signed_corr": -0.9456010960713666,
+      "lag": -3,
+      "lag_abs_corr": 0.5567638646920781
+    }
+  ],
+  "interpretation": {
+    "current": "static retrieval diagnostics plus materialized daily temporal edge observations",
+    "not_yet_materialized": "delta-compressed edge changes and P3 predictive-increment labels",
+    "edge_claim": "retrieval candidate, not a predictive-increment or causal relation label"
+  }
+}

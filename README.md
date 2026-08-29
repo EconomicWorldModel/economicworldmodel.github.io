@@ -9,7 +9,8 @@ Data Atlas v1 是当前 Polymarket 数据审计的公开网页与离线入口。
 - 七个代表案例分别揭示什么数据结构与建模边界；
 - 闭源 LLM 在 5 条匿名案例轨迹上的末段预测是否超过 persistence；
 - 原始 JSON / parquet 记录如何转成统一的 history / target 样本；
-- 当前能够和不能声称的研究边界。
+- 当前能够和不能声称的研究边界；
+- EventConnector 静态图、日历审计与 277 个可按 UTC 日期查询的 temporal edge snapshots。
 
 公开地址：
 
@@ -38,7 +39,8 @@ runs/polymarket_fast_dataset_v0/
 ```
 
 早期 Track A pilot 只用于验证样本形状；正式 A-H/A-D/A-S 数据集和确定性简单
-baseline 已经完成。P2 当前只有 lexical/calendar seed，P3 尚未开始。
+baseline 已经完成。P2 已完成 lexical/calendar seed、首轮相关筛选和 1,225 对优先审核
+候选，并基于冻结候选生成 277 个日频 edge snapshots；P3 尚未开始。
 
 ## 重建数据载荷
 
