@@ -309,7 +309,7 @@ WHERE snapshot_date = DATE '2025-08-01'
   AND available_from &lt;= TIMESTAMPTZ '2025-08-01 00:00:00+00'
   AND active;</pre>
           </div>
-          <p class="not-done"><b>时间边界：</b>1,225 对候选在 2025-07-31 23:59:59 UTC 才冻结，所以 v1 不把它们回填到训练期；首个合法 snapshot 是 2025-08-01。若需要训练期动态图，必须按历史时点重新生成候选宇宙。<b>存储边界：</b>当前 payload 仅约 3.1 MB，delta 编码留待规模扩大后再做。<a href="https://huggingface.co/datasets/Levi2ok/polymarket-eventconnector-compatible-v1/tree/main/edge_snapshots_v1">在 Hugging Face 查看数据</a>。</p>
+          <p class="not-done"><b>时间边界：</b>1,225 对候选在 2025-07-31 23:59:59 UTC 才冻结，所以 v1 不把它们回填到训练期；否则会产生候选选择泄漏。277 表示日期切片全部生成，不表示每个日期都含 1,225 条稠密边；每条 observation 对应 event pair 的代表 market pair。<b>存储边界：</b>当前 payload 仅约 3.1 MB，delta 编码留待规模扩大后再做。<a href="https://huggingface.co/datasets/Levi2ok/polymarket-eventconnector-compatible-v1/tree/main/edge_snapshots_v1">在 Hugging Face 查看数据</a>。</p>
         </div>
       </section>
 
