@@ -141,15 +141,13 @@ td b { color: var(--green); }
 .field-meaning-grid h3 { margin: 16px 0 9px; font: 500 20px Georgia, serif; }
 .field-meaning-grid p { margin: 0; color: rgba(255,255,255,.7); font-size: 14px; line-height: 1.7; }
 .field-meaning-grid code { color: rgba(255,255,255,.72); }
-#activity-features .field-meaning-grid article { border-color: var(--line); background: rgba(8,112,84,.04); }
-#activity-features .field-meaning-grid span { color: var(--green); }
-#activity-features .field-meaning-grid p,
-#activity-features .orientation-note { color: var(--muted); }
-#activity-features .hero-actions,
-#activity-inputs .hero-actions { margin-top: 24px; }
-#activity-features .button.secondary,
-#activity-inputs .button.secondary { color: var(--green); border-color: var(--green); }
-#activity-features .text-link { color: var(--green); }
+.activity-feature-release .field-meaning-grid article { border-color: var(--line); background: rgba(8,112,84,.04); }
+.activity-feature-release .field-meaning-grid span { color: var(--green); }
+.activity-feature-release .field-meaning-grid p,
+.activity-feature-release .orientation-note { color: var(--muted); }
+.activity-feature-release .hero-actions { margin-top: 24px; }
+.activity-feature-release .button.secondary { color: var(--green); border-color: var(--green); }
+.activity-feature-release .text-link { color: var(--green); }
 .trajectory-contract { display: grid; grid-template-columns: 1.15fr .85fr; margin-top: 17px; border: 1px solid rgba(255,255,255,.13); background: rgba(0,0,0,.12); }
 .trajectory-contract > div { padding: 25px; }
 .trajectory-contract span { color: var(--orange); font: 800 13px ui-monospace, monospace; letter-spacing: .12em; }

@@ -60,3 +60,5 @@ python scripts/export_polymarket_case_llm_baseline.py
 ## 2026-09-07 活动特征更新
 
 首页 `#activity-features` 与图页面 `#activity-inputs` 新增全量规模、字段解释、时间边界和下载入口。验收摘要在 `data/activity_features_v1_acceptance.json`。活动数据共 259 个 Parquet、约 9.13 GB，位于 [Hugging Face](https://huggingface.co/datasets/Levi2ok/polymarket-eventconnector-compatible-v1/tree/main/activity_features_v1)。已有 365,015 个样本全部对接；严格时间筛选后为 363,318 个。该发布不表示预测增量或因果关系已验证。
+
+同日页面一致性修订：首页与 Graph Atlas 均展示完整活动特征规模表、定义、时间边界和下载入口；Graph 页另外保留历史活动与快照的连接规则。首页旧版“P2 尚无轨迹信号”已更新为真实 UTC 筛选、1,225 对待审核候选及 277 个逐日快照，仍明确 P3 未完成。

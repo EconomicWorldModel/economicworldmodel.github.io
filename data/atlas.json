@@ -5827,8 +5827,8 @@
     },
     {
       "name": "P2 候选",
-      "state": "pilot",
-      "detail": "43,971 条 lexical/calendar seed"
+      "state": "complete",
+      "detail": "43,971 seeds 已筛选 · 1,225 对待审核 · 277 个逐日快照"
     },
     {
       "name": "P3 增量验证",

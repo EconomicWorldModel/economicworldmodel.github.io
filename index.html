@@ -6,7 +6,7 @@
   <meta name="description" content="从 Polymarket 可信成交重建多尺度市场信念轨迹，并形成面向单事件预测、跨事件检索与关系验证的统一实验数据基础。">
   <title>Polymarket Data Atlas v1</title>
   <script>document.documentElement.classList.add("atlas-locked");</script>
-  <link rel="stylesheet" href="assets/styles.css?v=activity-20260907">
+  <link rel="stylesheet" href="assets/styles.css?v=graph-activity-20260907b">
 </head>
 <body>
   <section class="access-gate" id="access-gate" role="dialog" aria-modal="true" aria-labelledby="access-title">
@@ -102,7 +102,7 @@
       <p class="table-note">数字口径：万级以上的规模同时显示精确值与“约 X 万／X 亿”；日期、比例、概率、容量和 ID 不换算。Observed 层只保存至少发生一笔可信成交的 bucket，不创建全市场稠密空桶。</p>
     </section>
 
-    <section class="section shell" id="activity-features">
+    <section class="section shell activity-feature-release" id="activity-features">
       <div class="section-heading">
         <div><p class="eyebrow">ACTIVITY FEATURES V1 · 2026-09-07</p><h2>价格之外，加入交易规模与信息新鲜度</h2></div>
         <p>1 小时用于主研究，日频对接 EventConnector，15 分钟检查短期领先关系。数据已完成全量验收。</p>
@@ -126,7 +126,7 @@
         <article><span>ACTUAL PRICE AGE</span><h3>价格距末笔成交多久？</h3><p>在桶结束时，用真实末笔成交时间计算年龄。小时价格最多延续一个无成交桶，日频和 15 分钟保留成交桶。排除首尾不完整桶。</p></article>
         <article><span>EVENTCONNECTOR</span><h3>保留身份，连接历史活动</h3><p>365,015 条原样本均配有十步历史活动。按真实可用时刻检查后，1,697 条跨越原切分边界，已标记；严格时间筛选后保留 363,318 条。</p></article>
       </div>
-      <p class="table-note">完整时段：1h / 15m 为 [2022-11-21 20:00, 2026-05-04 16:00) UTC；日频为 [2022-11-22 00:00, 2026-05-04 00:00) UTC。上方原始 bars 规模保留原口径，活动特征因排除不完整桶而略少。</p>
+      <p class="table-note">完整时段：1h / 15m 为 [2022-11-21 20:00, 2026-05-04 16:00) UTC；日频为 [2022-11-22 00:00, 2026-05-04 00:00) UTC。原始 bars 规模保留原口径，活动特征因排除不完整桶而略少。</p>
       <div class="orientation-note"><span>RESEARCH SCOPE</span><p>成交量衡量交易活跃度，不能直接等同于资金存量、流动性或情绪。数据及 9 项特征测试已验收；活动信息是否改善预测、来源市场是否有增量信息，仍需后续实验检验。</p></div>
       <div class="hero-actions">
         <a class="button primary" href="https://huggingface.co/datasets/Levi2ok/polymarket-eventconnector-compatible-v1/tree/main/activity_features_v1">在 Hugging Face 下载</a>
@@ -336,7 +336,7 @@
             <div class="migration-title"><span>A-D / EVENTCONNECTOR</span><b>检索 baseline</b></div>
             <section><h4>保留</h4><p><code>10→7</code> 多步接口、固定 top-k、相同预测器与训练预算下的 random / BM25 / SBERT / DTW / graph retrieval 消融。</p></section>
             <section><h4>必须改动</h4><ul><li>按真实共同 UTC 日期对齐，不按窗口数组位置直接相关；</li><li>图、阈值和索引只使用 forecast origin 前的数据，并做 rolling rebuild；</li><li>显式保留 market / event / family、answer 方向、mask、staleness 与共同活跃覆盖；</li><li>相关、DTW、lag、Granger 只进入 P2 候选；逐边结论交给 P3 的公共因子控制、反向边、时间置换、随机 pair、FDR 与 rolling OOS。</li></ul></section>
-            <p class="migration-status"><b>当前：</b>A-D 的 2,680,165（约 268.02 万）条正式样本已完成；E10–E12 尚未运行，43,971（约 4.40 万）条 P2 seed 也还没有 calendar-EC 轨迹信号。</p>
+            <p class="migration-status"><b>当前：</b>A-D 的 2,680,165（约 268.02 万）条正式样本已完成；E10–E12 检索预测实验尚未运行。43,971（约 4.40 万）条 P2 seed 已经完成首轮真实 UTC 轨迹筛选，得到 1,225 个待审核 event pairs，并生成 277 个逐日候选快照；详见<a href="graph/#event-subset">图结构页</a>。</p>
           </article>
 
           <article>
@@ -421,8 +421,8 @@
         <p>网页展示的是数据基础与样本准备度，不是跨事件关系结果。</p>
       </div>
       <div class="boundary-grid">
-        <article class="yes"><span>CAN SAY</span><h3>数据基础、正式样本与简单基线已经完成</h3><p>多尺度数据通过全量验收；Track A 已生成 31,949,309（约 3,194.93 万）条固定日历样本；P2 已生成 43,971（约 4.40 万）条 lexical/calendar 候选。</p></article>
-        <article class="no"><span>NOT YET</span><h3>还没有稳定跨事件关系标签</h3><p>P2 候选仍需轨迹信号和人工审核，P3 时间外增量验证尚未开始，更不能直接声称结构因果。</p></article>
+        <article class="yes"><span>CAN SAY</span><h3>数据基础、正式样本与简单基线已经完成</h3><p>多尺度数据通过全量验收；Track A 已生成 31,949,309（约 3,194.93 万）条固定日历样本；P2 已从 43,971（约 4.40 万）条 seed 中筛出 1,225 个优先候选，并物化 277 个逐日快照。</p></article>
+        <article class="no"><span>NOT YET</span><h3>还没有稳定跨事件关系标签</h3><p>P2 已有真实 UTC 轨迹证据与逐日快照，1,225 个优先候选仍待人工审核；P3 时间外增量验证尚未开始，更不能直接声称结构因果。</p></article>
       </div>
       <div class="next-step"><span>NEXT</span><p>下一阶段将完成训练型 target-only baseline、EventConnector / SWM 迁移、P2 候选审核与 P3 小规模闭环。</p><a href="#samples">回看样本接口 ↑</a></div>
     </section>
@@ -431,8 +431,8 @@
   <footer><div class="shell"><span>Economic World Model × Polymarket</span><span>Data Atlas v1 · Public static release</span><a href="#top">返回顶部 ↑</a></div></footer>
   </div>
   <script src="assets/access.js"></script>
-  <script src="data/atlas.js?v=activity-20260907"></script>
+  <script src="data/atlas.js?v=graph-activity-20260907b"></script>
   <script src="data/case_llm_baseline.js"></script>
-  <script src="assets/app.js?v=activity-20260907"></script>
+  <script src="assets/app.js?v=graph-activity-20260907b"></script>
 </body>
 </html>
