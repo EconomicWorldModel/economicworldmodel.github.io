@@ -5834,6 +5834,22 @@ window.ATLAS_DATA = {
       "name": "P3 增量验证",
       "state": "pending",
       "detail": "关系标签尚未生成"
+    },
+    {
+      "name": "Activity features v1",
+      "state": "complete",
+      "detail": "1h / 1d / 15m 全量特征 · 129 分区验收 · EC 历史伴随文件"
     }
-  ]
+  ],
+  "activity_features_release": {
+    "version": "polymarket-activity-features-v1",
+    "published_date": "2026-09-07",
+    "frequencies": [
+      "1h",
+      "1d",
+      "15m"
+    ],
+    "validation_url": "data/activity_features_v1_acceptance.json",
+    "download_url": "https://huggingface.co/datasets/Levi2ok/polymarket-eventconnector-compatible-v1/tree/main/activity_features_v1"
+  }
 };

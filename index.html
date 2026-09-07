@@ -6,7 +6,7 @@
   <meta name="description" content="从 Polymarket 可信成交重建多尺度市场信念轨迹，并形成面向单事件预测、跨事件检索与关系验证的统一实验数据基础。">
   <title>Polymarket Data Atlas v1</title>
   <script>document.documentElement.classList.add("atlas-locked");</script>
-  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/styles.css?v=activity-20260907">
 </head>
 <body>
   <section class="access-gate" id="access-gate" role="dialog" aria-modal="true" aria-labelledby="access-title">
@@ -33,6 +33,7 @@
       <div class="nav-links">
         <a href="#scale">Q1 规模</a>
         <a href="#schema">Q2 结构</a>
+        <a href="#activity-features">成交活动</a>
         <a href="#distribution">Q3 分布</a>
         <a href="#cases">Q4 案例</a>
         <a href="#research-baselines">研究 Baseline</a>
@@ -99,6 +100,39 @@
         <table id="frequency-table"></table>
       </div>
       <p class="table-note">数字口径：万级以上的规模同时显示精确值与“约 X 万／X 亿”；日期、比例、概率、容量和 ID 不换算。Observed 层只保存至少发生一笔可信成交的 bucket，不创建全市场稠密空桶。</p>
+    </section>
+
+    <section class="section shell" id="activity-features">
+      <div class="section-heading">
+        <div><p class="eyebrow">ACTIVITY FEATURES V1 · 2026-09-07</p><h2>价格之外，加入交易规模与信息新鲜度</h2></div>
+        <p>1 小时用于主研究，日频对接 EventConnector，15 分钟检查短期领先关系。数据已完成全量验收。</p>
+      </div>
+      <div class="direct-answer">
+        <span>NEW RELEASE</span>
+        <p>新增过去 <b>7 / 30 日成交规模</b>、相对历史的<b>异常成交量</b>、market / event / 平台<b>成交份额</b>与<b>真实价格年龄</b>。129 个频率×月份分区，259 个 Parquet，约 9.13 GB。</p>
+      </div>
+      <div class="table-wrap">
+        <table aria-label="活动特征全量规模">
+          <thead><tr><th>频率</th><th>Market 行数</th><th>Event 行数</th><th>研究用途</th></tr></thead>
+          <tbody>
+            <tr><td><b>1h</b></td><td>30,411,190（约 3,041.12 万）</td><td>11,856,822（约 1,185.68 万）</td><td>主研究与自身活动消融</td></tr>
+            <tr><td><b>1d</b></td><td>3,734,154（约 373.42 万）</td><td>1,310,285（约 131.03 万）</td><td>EventConnector 历史输入</td></tr>
+            <tr><td><b>15m</b></td><td>41,108,885（约 4,110.89 万）</td><td>18,688,800（约 1,868.88 万）</td><td>短期领先关系检查</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="field-meaning-grid">
+        <article><span>PAST ACTIVITY</span><h3>交易活跃度与异常活动</h3><p>以固定日历窗口累计现金成交额；异常量与此前 7 日或此前四周相同 UTC 时间槽比较。长历史不足时保留缺失值，基线不包含当前桶。</p></article>
+        <article><span>ACTUAL PRICE AGE</span><h3>价格距末笔成交多久？</h3><p>在桶结束时，用真实末笔成交时间计算年龄。小时价格最多延续一个无成交桶，日频和 15 分钟保留成交桶。排除首尾不完整桶。</p></article>
+        <article><span>EVENTCONNECTOR</span><h3>保留身份，连接历史活动</h3><p>365,015 条原样本均配有十步历史活动。按真实可用时刻检查后，1,697 条跨越原切分边界，已标记；严格时间筛选后保留 363,318 条。</p></article>
+      </div>
+      <p class="table-note">完整时段：1h / 15m 为 [2022-11-21 20:00, 2026-05-04 16:00) UTC；日频为 [2022-11-22 00:00, 2026-05-04 00:00) UTC。上方原始 bars 规模保留原口径，活动特征因排除不完整桶而略少。</p>
+      <div class="orientation-note"><span>RESEARCH SCOPE</span><p>成交量衡量交易活跃度，不能直接等同于资金存量、流动性或情绪。数据及 9 项特征测试已验收；活动信息是否改善预测、来源市场是否有增量信息，仍需后续实验检验。</p></div>
+      <div class="hero-actions">
+        <a class="button primary" href="https://huggingface.co/datasets/Levi2ok/polymarket-eventconnector-compatible-v1/tree/main/activity_features_v1">在 Hugging Face 下载</a>
+        <a class="button secondary" href="https://huggingface.co/datasets/Levi2ok/polymarket-eventconnector-compatible-v1/blob/main/activity_features_v1/README.md">字段与使用说明</a>
+        <a class="text-link" href="data/activity_features_v1_acceptance.json">查看验收结果 →</a>
+      </div>
     </section>
 
     <section class="section section-dark" id="schema">
@@ -397,8 +431,8 @@
   <footer><div class="shell"><span>Economic World Model × Polymarket</span><span>Data Atlas v1 · Public static release</span><a href="#top">返回顶部 ↑</a></div></footer>
   </div>
   <script src="assets/access.js"></script>
-  <script src="data/atlas.js"></script>
+  <script src="data/atlas.js?v=activity-20260907"></script>
   <script src="data/case_llm_baseline.js"></script>
-  <script src="assets/app.js"></script>
+  <script src="assets/app.js?v=activity-20260907"></script>
 </body>
 </html>

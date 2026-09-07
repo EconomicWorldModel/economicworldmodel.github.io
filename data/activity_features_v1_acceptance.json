@@ -1,0 +1,214 @@
+{
+  "dataset_version": "polymarket-activity-features-v1",
+  "status": "pass",
+  "completed_frequency_month_partitions": 129,
+  "parquet_file_count": 259,
+  "parquet_bytes": 9131013842,
+  "feature_checks": {
+    "1h/market": {
+      "rows": 30411190,
+      "time_history_flag_and_null_errors": 0
+    },
+    "1h/event": {
+      "rows": 11856822,
+      "time_history_flag_and_null_errors": 0
+    },
+    "1d/market": {
+      "rows": 3734154,
+      "time_history_flag_and_null_errors": 0
+    },
+    "1d/event": {
+      "rows": 1310285,
+      "time_history_flag_and_null_errors": 0
+    },
+    "15m/market": {
+      "rows": 41108885,
+      "time_history_flag_and_null_errors": 0
+    },
+    "15m/event": {
+      "rows": 18688800,
+      "time_history_flag_and_null_errors": 0
+    }
+  },
+  "conservation": {
+    "1h": {
+      "coverage_start_utc": "2022-11-21 20:00:00+00",
+      "coverage_end_exclusive_utc": "2026-05-04 16:00:00+00",
+      "source_usd_volume": 29107209432.61,
+      "source_token_volume": 76940776608.23999,
+      "source_trade_count": 763087661,
+      "market": {
+        "usd_volume_compensated_sum": 29107209432.61,
+        "token_volume_compensated_sum": 76940776608.24,
+        "trade_count": 763087661,
+        "minus_source_usd": 0.0,
+        "minus_source_tokens": 1.52587890625e-05,
+        "minus_source_trades": 0
+      },
+      "event": {
+        "usd_volume_compensated_sum": 29107209432.61,
+        "token_volume_compensated_sum": 76940776608.24,
+        "trade_count": 763087661,
+        "minus_source_usd": 0.0,
+        "minus_source_tokens": 1.52587890625e-05,
+        "minus_source_trades": 0
+      }
+    },
+    "1d": {
+      "coverage_start_utc": "2022-11-22 00:00:00+00",
+      "coverage_end_exclusive_utc": "2026-05-04 00:00:00+00",
+      "source_usd_volume": 29062903642.78,
+      "source_token_volume": 76848322438.45,
+      "source_trade_count": 760948691,
+      "market": {
+        "usd_volume_compensated_sum": 29062903642.78,
+        "token_volume_compensated_sum": 76848322438.45,
+        "trade_count": 760948691,
+        "minus_source_usd": 0.0,
+        "minus_source_tokens": 0.0,
+        "minus_source_trades": 0
+      },
+      "event": {
+        "usd_volume_compensated_sum": 29062903642.78,
+        "token_volume_compensated_sum": 76848322438.45,
+        "trade_count": 760948691,
+        "minus_source_usd": 0.0,
+        "minus_source_tokens": 0.0,
+        "minus_source_trades": 0
+      }
+    },
+    "15m": {
+      "coverage_start_utc": "2022-11-21 20:00:00+00",
+      "coverage_end_exclusive_utc": "2026-05-04 16:00:00+00",
+      "source_usd_volume": 29107209432.61,
+      "source_token_volume": 76940776608.23999,
+      "source_trade_count": 763087661,
+      "market": {
+        "usd_volume_compensated_sum": 29107209432.61,
+        "token_volume_compensated_sum": 76940776608.24,
+        "trade_count": 763087661,
+        "minus_source_usd": 0.0,
+        "minus_source_tokens": 1.52587890625e-05,
+        "minus_source_trades": 0
+      },
+      "event": {
+        "usd_volume_compensated_sum": 29107209432.61,
+        "token_volume_compensated_sum": 76940776608.23999,
+        "trade_count": 763087661,
+        "minus_source_usd": 0.0,
+        "minus_source_tokens": 0.0,
+        "minus_source_trades": 0
+      }
+    }
+  },
+  "totals": {
+    "1h": {
+      "market": {
+        "rows": 30411190,
+        "duplicate_rows": 0,
+        "observed_rows": 21735516,
+        "trade_count": 763087661,
+        "usd_volume": 29107209432.607742,
+        "token_volume": 76940776608.23949,
+        "full_history_7d_rows": 16921913,
+        "full_history_30d_rows": 11354067,
+        "relative_volume_7d_rows": 16822892,
+        "seasonal_relative_volume_rows": 7748922,
+        "feature_errors": 0.0,
+        "market_errors": 0.0
+      },
+      "event": {
+        "rows": 11856822,
+        "duplicate_rows": 0,
+        "observed_rows": 8850254,
+        "trade_count": 763087661,
+        "usd_volume": 29107209432.609818,
+        "token_volume": 76940776608.23958,
+        "full_history_7d_rows": 6574722,
+        "full_history_30d_rows": 4198377,
+        "relative_volume_7d_rows": 6553396,
+        "seasonal_relative_volume_rows": 3183011,
+        "feature_errors": 0.0
+      }
+    },
+    "1d": {
+      "market": {
+        "rows": 3734154,
+        "duplicate_rows": 0,
+        "observed_rows": 3734154,
+        "trade_count": 760948691,
+        "usd_volume": 29062903642.778934,
+        "token_volume": 76848322438.4499,
+        "full_history_7d_rows": 1971586,
+        "full_history_30d_rows": 1263227,
+        "relative_volume_7d_rows": 1827965,
+        "seasonal_relative_volume_rows": 1180554,
+        "feature_errors": 0.0,
+        "market_errors": 0.0
+      },
+      "event": {
+        "rows": 1310285,
+        "duplicate_rows": 0,
+        "observed_rows": 1310285,
+        "trade_count": 760948691,
+        "usd_volume": 29062903642.780106,
+        "token_volume": 76848322438.45038,
+        "full_history_7d_rows": 648905,
+        "full_history_30d_rows": 411132,
+        "relative_volume_7d_rows": 614306,
+        "seasonal_relative_volume_rows": 403140,
+        "feature_errors": 0.0
+      }
+    },
+    "15m": {
+      "market": {
+        "rows": 41108885,
+        "duplicate_rows": 0,
+        "observed_rows": 41108885,
+        "trade_count": 763087661,
+        "usd_volume": 29107209432.604816,
+        "token_volume": 76940776608.23807,
+        "full_history_7d_rows": 22561075,
+        "full_history_30d_rows": 15489321,
+        "relative_volume_7d_rows": 22481721,
+        "seasonal_relative_volume_rows": 9561870,
+        "feature_errors": 0.0,
+        "market_errors": 0.0
+      },
+      "event": {
+        "rows": 18688800,
+        "duplicate_rows": 0,
+        "observed_rows": 18688800,
+        "trade_count": 763087661,
+        "usd_volume": 29107209432.609337,
+        "token_volume": 76940776608.23898,
+        "full_history_7d_rows": 9825485,
+        "full_history_30d_rows": 6240318,
+        "relative_volume_7d_rows": 9810771,
+        "seasonal_relative_volume_rows": 4344005,
+        "feature_errors": 0.0
+      }
+    }
+  },
+  "conservation_method": "DuckDB fsum (compensated summation) for floating amounts; absolute difference below 0.001 USD/token; integer trade counts exact. summary.json sums ordinary monthly aggregates and can differ by floating reduction order.",
+  "eventconnector": {
+    "samples": 365015,
+    "unique_samples": 365015,
+    "split_boundary_ineligible": 1697,
+    "history_errors": 0,
+    "legacy_only_sample_ids": 0,
+    "companion_only_sample_ids": 0,
+    "split_eligible_samples": 363318
+  },
+  "hourly_equivalence_to_existing_complete_buckets": {
+    "old_only_rows": 0,
+    "new_only_rows": 0,
+    "differing_rows": 0,
+    "common_rows": 30411190
+  },
+  "tests": {
+    "command": "pytest -q tests/test_polymarket_activity_features.py",
+    "passed": 9
+  },
+  "scope": "Local feature delivery. No predictive-increment, retrieval or agent experiment performed."
+}

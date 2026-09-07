@@ -28,7 +28,9 @@
   const escape = (value) => String(value ?? "—").replace(/[&<>'"]/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
 
   $("#source-status").textContent = data.source_status.toUpperCase();
-  $("#generated-at").textContent = `Payload generated ${data.generated_at_utc}`;
+  $("#generated-at").textContent = data.activity_features_release
+    ? `基础摘要 ${date(data.generated_at_utc)} · 活动特征更新 ${data.activity_features_release.published_date}`
+    : `Payload generated ${data.generated_at_utc}`;
   $("#hero-events").innerHTML = `${fmt(data.headline.events)}<small>${magnitude(data.headline.events)}</small>`;
   $("#hero-markets").innerHTML = `${fmt(data.headline.traded_markets)}<small>${magnitude(data.headline.traded_markets)}</small>`;
   $("#hero-span").textContent = data.headline.span_years.toFixed(2);

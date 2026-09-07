@@ -6,7 +6,7 @@
   <meta name="description" content="Polymarket EventConnector-compatible 数据、静态图审计与已物化的逐日 temporal edge snapshots。">
   <title>Polymarket Graph Atlas v1</title>
   <script>document.documentElement.classList.add("atlas-locked");</script>
-  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="stylesheet" href="../assets/styles.css?v=activity-20260907">
   <link rel="stylesheet" href="assets/graph.css">
 </head>
 <body>
@@ -38,6 +38,7 @@
           <a href="#time-audit">时间审计</a>
           <a href="#snapshot">Snapshot</a>
           <a href="#schema">字段</a>
+          <a href="#activity-inputs">活动输入</a>
         </div>
       </nav>
 
@@ -71,6 +72,17 @@
         <article><span>REVIEW-PRIORITY PAIRS</span><b>1,225</b><small>高阈值、待审核 event pairs</small></article>
         <article><span>DAILY SNAPSHOTS</span><b>277</b><small>2025-08-01 至 2026-05-04</small></article>
         <article><span>ACTIVE OBSERVATIONS</span><b>3,463</b><small>约 0.35 万行，涉及 86 对 markets</small></article>
+      </section>
+
+      <section class="section shell" id="activity-inputs">
+        <div class="section-heading">
+          <div><p class="eyebrow">ACTIVITY INPUTS · 2026-09-07</p><h2>为检索与关系检查加入交易活动</h2></div>
+          <p>全量 1h / 1d / 15m 特征已发布，包含历史规模、异常量、成交份额与真实价格年龄。</p>
+        </div>
+        <div class="direct-answer"><span>HISTORY ONLY</span><p>EventConnector 的 <b>365,015</b> 个样本 ID 均有十步历史活动伴随记录。未来目标活动不进入输入；<b>1,697</b> 条跨原切分边界的记录已标记，严格时间筛选后为 <b>363,318</b> 条。</p></div>
+        <p>按 <code>sample_id</code> 连接伴随文件，保留历史完整性与缺失标记，并显式扩展模型输入。旧日标签对应的整日状态在次日零点才完整可用；图快照连接活动时须满足 <code>available_from ≤ snapshot_time</code>。</p>
+        <p class="table-note">新特征提供可用于比较的输入；已有相关候选图的含义不变。成交量增量、跨市场预测领先和 agent 信息选择能力均需单独实验验证。</p>
+        <div class="hero-actions"><a class="button primary" href="https://huggingface.co/datasets/Levi2ok/polymarket-eventconnector-compatible-v1/blob/main/activity_features_v1/README.md">下载与对接说明</a><a class="button secondary" href="../#activity-features">查看完整特征规模</a></div>
       </section>
 
       <section class="section shell" id="pipeline">
