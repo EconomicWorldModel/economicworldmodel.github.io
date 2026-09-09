@@ -1,6 +1,37 @@
 # 先用 Luna 跑不训练的预测，再比较预测头
 
+> 实验更新：无需再次调用 Luna 的数值分层与两组 Ridge 训练已完成，见[本轮结果](2026-09-09-polymarket-no-call-results.md)。Luna full 已完成 200 条 validation，MSE 0.007784、skill -6.30%；不能据此认定精度已高或无需训练，见[数据波动与任务难度复查](2026-09-09-polymarket-luna-difficulty-review.md)。下文命令保留为复运行入口。
+
 现在已经把数据落盘，并写好了两条可运行的路径。两条路径都输入一个盘口过去 10 天的信息，输出未来 7 天的价格。Luna 直接读 prompt 返回 JSON；开源 LLM 则先提取 hidden state，再训练一个七维预测头。Luna 这条路径不需要训练集，也不需要安装 Transformers。
+
+## 当前实验安排：先整理已有结果，不重复调用 full Luna
+
+本次改为主要展示 RMSE，同时报告 MAE，不需要重新生成预测。已有 `runs/polymarket_luna_validation_200/metrics.json` 已包含二者；如果需要统一评分版本或增加分层，只读取保存的预测与标签重新评分。更换展示指标不改变原 prompt、样本或模型输出。
+
+| 本轮报告项 | Luna full | Persistence | 如何解释 |
+| --- | ---: | ---: | --- |
+| RMSE（价格百分点） | 8.82 | 8.56 | 主要展示，恢复到价格单位，对大误差敏感 |
+| MAE（价格百分点） | 4.78 | 4.55 | 平均绝对偏离，补充解释 |
+| MSE（原始价格平方） | 0.007784 | 0.007323 | 保留原分数，并与训练目标对应 |
+| MSE skill | -6.30% | 0% | 定义仍为 1 − MSE_model / MSE_persistence，不替换成 RMSE 比值 |
+
+价格百分点 = 原始价格误差 ×100，不是相对涨跌百分比。先在同一批有效评分点上计算 pooled MSE，再开平方得到 pooled RMSE；不能把各窗口 RMSE 的平均值当作同一指标。整体、逐预测日及分层结果分别计算，始终对齐样本与 mask。另保留等 market / parent event 的宏平均 MSE，明确聚合方式。
+
+训练仍使用 masked MSE，标签全部有效时等于 MSE；validation 选 checkpoint 仍使用相同评分点上的 pooled MSE。因为平方根单调，改用对应 pooled RMSE 不会改变模型或 checkpoint 排名。此次没有改用 MAE loss，也没有因此启动训练。
+
+| 下一步 | 使用哪些现成内容 | 是否重新调用 Luna | 交付 |
+| --- | --- | --- | --- |
+| 整理当前成绩 | 已有 predictions、labels、metrics | 不需要 | RMSE/MAE 价格百分点、MSE skill、覆盖率、逐日结果 |
+| 补充分层报告 | 原预测与预测前价格、历史波动、成交规模、价格年龄 | 不需要 | 每层样本数、两模型误差与配对差异；已有事件 bootstrap 保留 |
+| 训练便宜的数值对照 | train 训练，validation 选型，保持同一 200 条比较清单 | 不需要 | 价格/完整量价的线性、Ridge 或 DLinear 对照，检查有无可学习增量 |
+| 检查 Luna 输入增益 | 同一 200 条，新增 price-only 和 price-question 两组 | 需要，仅运行新增组 | 与已有 full 组比较；冻结其余模型设置并记录调用时间和成本 |
+| 最终 test | 选定模型、prompt 和设置后使用固定 test 清单 | 若评测 Luna，需要新的 test 预测 | 一次最终评价；不能直接复用 validation 预测 |
+
+前两项和小数值模型对照现已完成；下一步可训练冻结 LLM 数值头，并另行安排 Luna 输入消融。训练头的 validation 选型使用 `runs/polymarket_head_ready_v1/validation_tuning/` 的 5,420 条，排除固定 pilot 的全部 parent events，避免同事件调参与比较混用；不要再次运行完全相同的 full 组来“获得 RMSE”。只有明确要测随机性或重复性时，才单独设计重复调用实验，不能把重复调用当作指标重算。若模型服务版本已变化，后续消融须注明不同调用时间的限制，不能把所有差异都归因于输入。
+
+可以把下面这段交给后续对话：
+
+> 请使用已有 Luna full 200 条 validation 的 predictions.jsonl 与对应标签整理评测报告，不重新调用模型。主要展示 RMSE 和 MAE 的价格百分点，同时保留 MSE、MSE skill、覆盖率和逐日结果；在同一批样本上按预测前价格位置、历史波动、成交规模和价格年龄分层，并与 persistence 对齐比较。不要用未来大波动筛选新的评测清单。完成后再单独安排小数值模型训练和 Luna 输入消融，test 暂不运行。
 
 ## 数据在哪里，分别放了什么
 
@@ -22,9 +53,9 @@
 
 小样本是对排序后的 ID 使用固定种子 `20260909` 均匀抽样，没有按未来变化筛选。它保留了“窗口多的事件更容易入选”的分布，并非主题或活跃度分层抽样；正式论文仍需检查覆盖和事件层面的误差。测试清单已固定，但本轮没有运行测试集模型评分。
 
-## 在另一个 Codex 对话直接执行
+## 原 Luna 调用命令：仅在明确需要新预测时执行
 
-可以把下面这段话交给另一个对话：
+以下是已完成的首轮调用说明，保留用于复现；当前整理 RMSE/MAE 不执行这段调用任务：
 
 > 请阅读 docs/2026-09-09-polymarket-training-handoff.md，先用现有脚本调用 gpt-5.6-luna，对固定 validation 输入的前 5 条做 training-free 预测。使用 full 输入，不改 prompt，不读取标签辅助回答。预测子进程只接收单条历史 prompt；保存模型输出后，再调用独立评分脚本读取标签，报告 MSE、MAE、相对 persistence 的 skill、有效输出覆盖率和调用耗时。模型不可用时报告实际错误，不悄悄替换模型。先检查这 5 条的调用与格式，再运行完整 200 条 validation；测试集留到输入和设置确定后使用。
 
@@ -108,7 +139,7 @@ python scripts/score_polymarket_forecast.py \
 - 九项单元/集成测试覆盖 loss、评分、padding pooling、prompt 特征与预测头训练/保存/加载。
 - 用本地随机初始化的小型 GPT-2 模型编码了两条真实完整 prompt，验证 tokenizer → backbone → pooling 的接口；这是软件检查，不是预训练 LLM 的预测效果。
 - 固定 validation 上的 persistence 运行与独立评分、Luna 五条 prompt 预览已完成。
-- 本轮没有调用 Luna，没有训练实际预训练 LLM 的预测头；Luna 模型名是否被当前账号支持，仍以另一个对话的实际调用为准。
+- 后续对话已完成指定 Luna 的 5 条与 200 条 validation；两组 Ridge 数值模型也已训练；实际预训练 LLM 预测头仍未训练，test 未运行。
 
 重建数据与检查：
 

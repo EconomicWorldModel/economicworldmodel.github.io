@@ -113,7 +113,7 @@
 
     <section class="section shell activity-feature-release" id="forecast-ready">
       <div class="section-heading"><div><p class="eyebrow">FORECAST DATA · 2026-09-09</p><h2>从量价数据到模型输入：过去 10 天，预测未来 7 天</h2></div>
-      <p>训练、验证、测试数据与完整 prompt 已准备；当前先做历史价格预测，尚未得到 LLM 的正式比较结果。</p></div>
+      <p>训练、验证、测试数据与完整 prompt 已准备；Luna 与小数值模型已完成首轮 validation 比较，最终 test 尚未运行。</p></div>
       <div class="table-wrap"><table aria-label="预测数据划分"><thead><tr><th>划分</th><th>完整样本</th><th>固定试跑样本</th></tr></thead><tbody>
       <tr><td>Train</td><td>212,393</td><td>200</td></tr><tr><td>Validation</td><td>13,831</td><td>200</td></tr><tr><td>Test</td><td>137,094</td><td>1,000</td></tr></tbody></table></div>
       <div class="field-meaning-grid">
@@ -121,11 +121,95 @@
       <article><span>OUTPUT</span><h3>七个未来价格</h3><p>同一盘口未来七个完整 UTC 日的价格，范围 0–1。标签单独保存，只用于训练 loss 或预测后的评分。MSE 为主要指标，MAE 补充评价。</p></article>
       <article><span>PROMPT STORAGE</span><h3>每条完整 prompt 已落盘</h3><p>每个划分分别保存结构化输入、未来标签和完整 full prompt。prompt 提供编码版与要求 JSON 回答的 training-free 版；同一个模板生成，逐条核对一致。大文件目前位于本地工作区。</p></article>
       </div>
-      <div class="orientation-note"><span>PROGRESS</span><p>T-M 指标与 loss、T1 全量导出已完成。T2 已固定随机清单，分层覆盖分析待补。T3 已准备训练/测试脚本，并完成 200 条 validation 的 persistence 对照（MSE 0.007323，MAE 0.04549）；Luna 与实际预训练 LLM 预测头实验尚未运行。T0 自然语言定位及 T4–T7 检索、Agent、增量验证仍待推进。</p></div>
+      <div class="orientation-note"><span>PROGRESS</span><p>T-M 指标与 loss、T1 全量导出已完成。T2 已完成固定清单和四类数值分层，主题覆盖待补。T3 已完成 Luna full 200 条 validation 与两组 Ridge 数值训练；冻结 LLM 预测头与 Luna 输入消融尚未运行。T0 自然语言定位及 T4–T7 检索、Agent、增量验证仍待推进。</p></div>
       <p class="table-note">剔除 1,697 条跨时间边界窗口后，共 363,318 条；三个划分的 parent event ID 无交集，但并不保证语义事件族独立。固定样本未按未来涨跌筛选。历史回测仍可能受模型预训练记忆影响。全量文件尚未上传 Hugging Face，现有活动特征下载入口保留原含义。</p>
       <div class="hero-actions"><a class="button primary" href="../data/forecast_example_prompt.txt">查看完整英文 prompt</a><a class="button secondary" href="../data/polymarket_training_handoff.md">训练与 Luna 运行说明</a><a class="text-link" href="../data/forecast_prompt_export_report.json">全量 prompt 导出检查 →</a></div>
     </section>
 
+<section class="section shell activity-feature-release" id="training-free-results">
+<div class="section-heading"><div><p class="eyebrow">VALIDATION RESULTS · 2026-09-09</p><h2>不训练的 Luna，是否超过保持原价？</h2></div><p>复用现有 200 条完整量价预测；本轮新增 LLM 调用为 0。另完成两组小数值模型训练，test 尚未评分。</p></div>
+<div class="table-wrap"><table aria-label="同一样本预测结果"><thead><tr><th>方法</th><th>RMSE（价格百分点）</th><th>MAE（价格百分点）</th><th>MSE skill</th></tr></thead><tbody><tr><td>Persistence</td><td>8.557</td><td>4.549</td><td>+0.00%</td></tr><tr><td>Luna full (no training)</td><td>8.823</td><td>4.782</td><td>-6.30%</td></tr><tr><td>Ridge: prices</td><td>8.662</td><td>4.585</td><td>-2.46%</td></tr><tr><td>Ridge: price + activity</td><td>8.633</td><td>4.562</td><td>-1.78%</td></tr></tbody></table></div>
+<p class="table-note">四组均为 200/200 有效输出、1,400 个评分点。Luna 使用 gpt-5.6-luna、英文 full prompt、low reasoning；原运行累计调用耗时 2,263.117 秒，平均 11.316 秒/条，工具事件为 0。Ridge 是已训练的数值对照，不属于 training-free LLM。</p>
+<div class="orientation-note"><span>WHAT THIS MEANS</span><p>当前 Luna 和两组 Ridge 都没有超过 persistence。MSE 小不等于高准确率：Luna RMSE 为 8.82 个价格百分点。此前按事件 bootstrap 的 Luna skill 区间跨零，尚不能断言模型稳定更差；也不能据此认定训练没有必要。</p></div>
+<img src="../data/forecast_rmse_by_horizon.png" alt="四种方法在未来第一至第七天的 RMSE 比较" style="display:block;max-width:100%;height:auto;margin:24px auto">
+<div class="field-meaning-grid"><article><span>BEFORE PREDICTION</span><h3>分层检查已完成</h3><p>按预测前价格位置、十天历史波动、日成交额和价格年龄分层；保存各组数量、逐日误差和事件成组配对区间。成交额 1,000–10,000 美元组有正 skill 点估计，但区间跨零，不能认定稳定有效。</p></article><article><span>NUMERICAL TRAINING</span><h3>两组 Ridge 对照</h3><p>212,393 条 train 拟合；使用排除 pilot 全部 parent events 后的 5,420 条 validation 选正则强度。价格组 10 维，完整量价及 mask 组 220 维；均预测七日残差。模型已保存并检查重新加载。</p></article><article><span>NEXT TRAINING</span><h3>保留对照，再训练预测头</h3><p>下一步可用冻结 LLM hidden state 加七维数值头，与当前方法比较。Luna 输入消融尚未运行；主题覆盖、跨事件检索与最终 test 仍待完成。</p></article></div>
+<details><summary>查看中文完整 prompt（阅读翻译，尚未测试中文效果）</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.7">说明：以下为阅读用中文翻译；已报告 Luna 成绩使用英文 prompt，尚未测试中文版本。
+
+【任务】
+根据提供的历史信息，预测同一盘口结果未来 7 个完整 UTC 日的收盘成交价格。
+只能使用给出的历史；不得浏览、调用工具、读取文件或检索其他数据。
+价格范围为 0–1。预测的是市场价格，不是最终事件结果。
+MISSING 表示不可用，不代表零。
+
+【盘口】
+问题（保留原文）：Will India win the 2025 Asia Cup?
+价格对应的结果：Yes
+频率：一个完整 UTC 日。
+Day 0 是最近一个已经结束的完整日；预测范围为 Day +1 到 Day +7。
+
+【历史数据】
+从 Day -9 到 Day 0 按时间排列。
+成交额字段为自然对数 ln(1 + 成交额/1美元)。
+成交笔数、相对成交量为 ln(1 + 原值)。
+异常成交量保留原有带符号的历史活动分数。
+成交份额为 0–1 比例；价格年龄为 ln(1 + 年龄小时数)。
+每行的滚动特征只使用截至该日结束已经可用的信息。
+字段：day,价格,log日成交额,log成交笔数,log7日成交额,log30日成交额,log相对成交量,异常log成交量,事件内成交份额,盘口平台份额,事件平台份额,log价格年龄小时
+-9,0.73,3.49953328,1.79175947,5.18587629,6.14942937,0.637233897,0.286739608,0.661582852,1.85125572e-06,2.79822204e-06,2.49691756
+-8,0.53,4.39605281,1.60943791,5.41552246,6.30733312,1.42454511,1.35152549,0.690299793,4.04439627e-06,5.85889828e-06,1.87094711
+-7,0.73,4.36767413,2.56494936,5.68639892,6.440053,1.23388239,1.20300532,0.341671055,4.02812651e-06,1.17894872e-05,1.83502293
+-6,0.89,5.56582224,2.89037176,6.28977123,6.78759692,1.97438066,2.08949302,0.554800213,1.36873636e-05,2.46707973e-05,2.06189262
+-5,0.76,3.55134004,1.94591015,6.25492437,6.81610041,0.365013223,-0.314190226,1,1.66738415e-06,1.66738415e-06,2.29295554
+-4,0.75,4.15810153,2.19722458,6.36023109,6.88281689,0.614160878,0.35328147,0.215574809,3.01706633e-06,1.39954494e-05,2.00709484
+-3,0.92,7.10067052,3.13549422,7.47308045,7.6902723,2.75310611,2.96109664,0.813073264,4.33902118e-05,5.33656851e-05,2.07659026
+-2,0.9,1.763017,1.60943791,7.45746502,7.69144676,0.0190385412,-2.89972508,0.135941458,2.92893779e-07,2.15455817e-06,2.48017324
+-1,0.84,2.47317139,1.38629436,7.41666707,7.69210878,0.0429615836,-1.94149693,0.116025641,3.67916077e-07,3.17098939e-06,1.99386852
+0,0.78,6.5479182,3.25809654,7.73298718,7.96785194,1.36962823,2.40794722,0.819261384,1.75708259e-05,2.1447155e-05,0.313187363
+
+【预测要求】
+按时间顺序输出未来七天的价格。这是同一结果的七个连续日，不是七种不同结果，数值不需要加总为 1。
+只返回一个 JSON 对象：{&quot;predicted_price&quot;:[p1,p2,p3,p4,p5,p6,p7]}。
+将占位符替换为 0–1 之间的数值。
+</pre></details>
+<details><summary>查看英文完整 prompt（当前 Luna 实际使用的模板与真实示例）</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.7">TASK
+Predict the next 7 complete UTC days&#x27; closing traded prices for the same outcome.
+Use only the supplied history. Do not browse, call tools, inspect files, or retrieve other data.
+Prices are in [0,1]. Predict market prices, not the final event winner.
+MISSING means unavailable, not zero.
+
+TARGET
+Question: Will India win the 2025 Asia Cup?
+Priced outcome: Yes
+Frequency: one complete UTC day.
+Day 0 is the latest completed day; the forecast covers Day +1 through Day +7.
+
+HISTORY
+Rows run from Day -9 to Day 0 in chronological order.
+Volume fields = natural log(1 + USD volume / 1 USD).
+Trade count and relative volume = natural log(1 + value).
+Abnormal log volume is a signed historical activity score, kept as supplied.
+Shares are fractions in [0,1]. Price age = natural log(1 + age in hours).
+Each rolling feature uses information available by that row&#x27;s day end.
+Columns: day,price,log_volume_day,log_trade_count,log_volume_7d,log_volume_30d,log_relative_volume_7d,abnormal_log_volume_7d,within_event_share,market_platform_share,event_platform_share,log_price_age_hours
+-9,0.73,3.49953328,1.79175947,5.18587629,6.14942937,0.637233897,0.286739608,0.661582852,1.85125572e-06,2.79822204e-06,2.49691756
+-8,0.53,4.39605281,1.60943791,5.41552246,6.30733312,1.42454511,1.35152549,0.690299793,4.04439627e-06,5.85889828e-06,1.87094711
+-7,0.73,4.36767413,2.56494936,5.68639892,6.440053,1.23388239,1.20300532,0.341671055,4.02812651e-06,1.17894872e-05,1.83502293
+-6,0.89,5.56582224,2.89037176,6.28977123,6.78759692,1.97438066,2.08949302,0.554800213,1.36873636e-05,2.46707973e-05,2.06189262
+-5,0.76,3.55134004,1.94591015,6.25492437,6.81610041,0.365013223,-0.314190226,1,1.66738415e-06,1.66738415e-06,2.29295554
+-4,0.75,4.15810153,2.19722458,6.36023109,6.88281689,0.614160878,0.35328147,0.215574809,3.01706633e-06,1.39954494e-05,2.00709484
+-3,0.92,7.10067052,3.13549422,7.47308045,7.6902723,2.75310611,2.96109664,0.813073264,4.33902118e-05,5.33656851e-05,2.07659026
+-2,0.9,1.763017,1.60943791,7.45746502,7.69144676,0.0190385412,-2.89972508,0.135941458,2.92893779e-07,2.15455817e-06,2.48017324
+-1,0.84,2.47317139,1.38629436,7.41666707,7.69210878,0.0429615836,-1.94149693,0.116025641,3.67916077e-07,3.17098939e-06,1.99386852
+0,0.78,6.5479182,3.25809654,7.73298718,7.96785194,1.36962823,2.40794722,0.819261384,1.75708259e-05,2.1447155e-05,0.313187363
+
+PREDICTION TARGET
+Return seven prices in chronological order. These are consecutive days, not different outcomes;
+the seven values do not need to sum to one.
+Forecast:
+Return one JSON object only: {&quot;predicted_price&quot;: [p1,p2,p3,p4,p5,p6,p7]}. Replace each placeholder with a number in [0,1].
+</pre></details>
+<div class="hero-actions"><a class="button primary" href="../data/forecast_no_call_results.md">完整实验说明</a><a class="button secondary" href="../data/forecast_strata.csv">下载分层结果 CSV</a><a class="text-link" href="../data/forecast_by_horizon.csv">逐日结果 →</a><a class="text-link" href="../data/forecast_prompt_zh.txt">中文 prompt 文本 →</a></div>
+</section>
       <section class="section shell" id="pipeline">
         <div class="section-heading">
           <div><p class="eyebrow">01 / DATA PIPELINE</p><h2>现在的数据与图是怎样形成的？</h2></div>
