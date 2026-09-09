@@ -42,7 +42,7 @@
         <div>
           <p class="eyebrow">POLYMARKET · DATA → PROMPT → FORECAST</p>
           <h1>从市场轨迹，<br><em>到可检验的预测。</em></h1>
-          <p class="hero-copy">过去 <code>10 天 × 11 个量价特征</code>，预测未来七天价格。完整数据与 prompt 已准备，Luna 和两组 Ridge 已完成首轮验证；下一步训练冻结 LLM 的数值预测头，检验能否超过“保持最后价格”的对照。</p>
+          <p class="hero-copy">过去 <code>10 天 × 11 个量价特征</code>，预测未来七天价格。完整数据与 prompt 已准备，Luna、Terra、Sol 和两组 Ridge 已完成验证；后续比较输入消融与冻结 LLM 的数值预测头，检验能否超过“保持最后价格”的对照。</p>
           <div class="hero-actions">
             <a class="button primary" href="#forecast-ready">进入训练交接</a>
             <a class="button secondary" href="#training-free-results">查看结果与中文 Prompt</a>
@@ -55,11 +55,11 @@
           <dl>
             <div><dt>严格划分样本</dt><dd>363,318 条</dd></div>
             <div><dt>完整历史 Prompt</dt><dd>逐条保存并核对</dd></div>
-            <div><dt>Luna validation</dt><dd>200 / 200 完成</dd></div>
+            <div><dt>LLM validation</dt><dd>三种模型各 200 条</dd></div>
             <div><dt>Ridge 数值对照</dt><dd>价格 / 完整量价</dd></div>
-            <div><dt>下一步</dt><dd>冻结 LLM + 预测头</dd></div>
+            <div><dt>下一步</dt><dd>输入消融 / 预测头</dd></div>
           </dl>
-          <p class="cover-result-note">当前 Luna 与 Ridge 均未超过 persistence；最终 test 尚未评分。</p>
+          <p class="cover-result-note">当前三种 LLM 与 Ridge 均未超过 persistence；最终 test 尚未评分。</p>
         </aside>
       </div>
     </header>
@@ -109,7 +109,7 @@
 
     <section class="section shell activity-feature-release" id="forecast-ready">
       <div class="section-heading"><div><p class="eyebrow">FORECAST DATA · 2026-09-09</p><h2>从量价数据到模型输入：过去 10 天，预测未来 7 天</h2></div>
-      <p>训练、验证、测试数据与完整 prompt 已准备；Luna 与小数值模型已完成首轮 validation 比较，最终 test 尚未运行。</p></div>
+      <p>训练、验证、测试数据与完整 prompt 已准备；Luna、Terra、Sol 与两组 Ridge 已完成 validation 比较，最终 test 尚未运行。</p></div>
       <div class="table-wrap"><table aria-label="预测数据划分"><thead><tr><th>划分</th><th>完整样本</th><th>固定试跑样本</th></tr></thead><tbody>
       <tr><td>Train</td><td>212,393</td><td>200</td></tr><tr><td>Validation</td><td>13,831</td><td>200</td></tr><tr><td>Test</td><td>137,094</td><td>1,000</td></tr></tbody></table></div>
       <div class="field-meaning-grid">
@@ -117,230 +117,128 @@
       <article><span>OUTPUT</span><h3>七个未来价格</h3><p>同一盘口未来七个完整 UTC 日的价格，范围 0–1。标签单独保存，只用于训练 loss 或预测后的评分。主要展示 RMSE、补充 MAE；保留 MSE skill，训练 loss 仍用 masked MSE。</p></article>
       <article><span>PROMPT STORAGE</span><h3>每条完整 prompt 已落盘</h3><p>每个划分分别保存结构化输入、未来标签和完整 full prompt。prompt 提供编码版与要求 JSON 回答的 training-free 版；同一个模板生成，逐条核对一致。完整文件已落盘，并随加密训练交接包提供。</p></article>
       </div>
-      <div class="orientation-note"><span>PROGRESS</span><p>T-M 指标与 loss、T1 全量导出已完成。T2 已完成固定清单和四类数值分层，主题覆盖待补。T3 已完成 Luna full 200 条 validation 与两组 Ridge 数值训练；冻结 LLM 预测头与 Luna 输入消融尚未运行。T0 自然语言定位及 T4–T7 检索、Agent、增量验证仍待推进。</p></div>
+      <div class="orientation-note"><span>PROGRESS</span><p>T-M 指标与 loss、T1 全量导出已完成。T2 已完成固定清单和四类数值分层，主题覆盖待补。T3 已完成 Luna / Terra / Sol full 200 条 validation 与两组 Ridge 数值训练；冻结 LLM 预测头与 Luna 输入消融尚未运行。T0 自然语言定位及 T4–T7 检索、Agent、增量验证仍待推进。</p></div>
       <p class="table-note">剔除 1,697 条跨时间边界窗口后，共 363,318 条；三个划分的 parent event ID 无交集，但并不保证语义事件族独立。固定样本未按未来涨跌筛选。历史回测仍可能受模型预训练记忆影响。全量文件尚未上传 Hugging Face，现有活动特征下载入口保留原含义。</p>
-      <div class="hero-actions"><a class="button primary" href="../data/forecast_example_prompt.txt">查看完整英文 prompt</a><a class="button secondary" href="../data/polymarket_training_handoff.md">训练与 Luna 运行说明</a><a class="text-link" href="../data/forecast_prompt_export_report.json">全量 prompt 导出检查 →</a></div>
-    <div class="orientation-note"><span>NEXT RUN</span><p>训练使用 212,393 条 train，选型使用排除 pilot 事件后的 5,420 条 validation，再比较固定 200 条 pilot。先设置模型路径，运行 <code>scripts/run_polymarket_head_next.sh</code>；不重新调用现有 Luna full，不使用 test 调参。</p></div>
-<details class="handoff-document" id="training-handoff-document"><summary>展开完整训练交接文档：数据、指标、命令与下一步</summary><h3>Polymarket 训练交接：已有结果与下一步预测头实验</h3>
-<blockquote>
-<p>实验更新：无需再次调用 Luna 的数值分层与两组 Ridge 训练已完成，见<a href="../data/2026-09-09-polymarket-no-call-results.md">本轮结果</a>。Luna full 已完成 200 条 validation，MSE 0.007784、skill -6.30%；不能据此认定精度已高或无需训练，见<a href="../data/2026-09-09-polymarket-luna-difficulty-review.md">数据波动与任务难度复查</a>。下文命令保留为复运行入口。</p>
-</blockquote>
-<p>现在已经把数据落盘，并写好了两条可运行的路径。两条路径都输入一个盘口过去 10 天的信息，输出未来 7 天的价格。Luna 直接读 prompt 返回 JSON；开源 LLM 则先提取 hidden state，再训练一个七维预测头。Luna 这条路径不需要训练集，也不需要安装 Transformers。</p>
-<h4>当前进度与下一步入口</h4>
-<p>完整数据、prompt、Luna full 200 条 validation、四类数值分层和两组 Ridge 对照均已完成。现在不需要重复调用 Luna，也不需要再训练同一组 Ridge。</p>
-<p>下一步训练入口为 <code>scripts/run_polymarket_head_next.sh</code>：使用 212,393 条 train 拟合冻结 LLM 的七维预测头，使用排除 pilot 所属事件后的 5,420 条 validation 选 checkpoint，再在固定 200 条 pilot 上比较。test 暂不评分。先设置 <code>FORECAST_MODEL</code>，具体命令见后文；完整数据和代码也已提供加密交接包。</p>
-<p>当前比较：persistence / Luna / Ridge 价格 / Ridge 完整量价的 RMSE 分别为 8.557 / 8.823 / 8.662 / 8.633 个价格百分点，尚无超越 persistence 的整体结果。训练完成后仍按同一口径比较，不能把训练完成等同于有效提升。</p>
-<p>网页入口：<a href="https://economicworldmodel.github.io/graph/#forecast-ready">Graph Atlas 训练交接</a>；结果入口：<a href="https://economicworldmodel.github.io/graph/#training-free-results">validation 比较与中英文 prompt</a>。</p>
-<h4>评测安排与执行状态</h4>
-<p>本次改为主要展示 RMSE，同时报告 MAE，不需要重新生成预测。已有 <code>runs/polymarket_luna_validation_200/metrics.json</code> 已包含二者；如果需要统一评分版本或增加分层，只读取保存的预测与标签重新评分。更换展示指标不改变原 prompt、样本或模型输出。</p>
+      <div class="hero-actions"><a class="button primary" href="../data/forecast_example_prompt.txt">查看完整英文 prompt</a><a class="button secondary" href="../data/polymarket_training_handoff.md">最新实验交接</a><a class="text-link" href="../data/forecast_prompt_export_report.json">全量 prompt 导出检查 →</a></div>
+    <div class="orientation-note"><span>NEXT EXPERIMENT</span><p>三种 LLM full 已完成。后续可做同模型输入消融或冻结 LLM 数值头；选型数据为排除 pilot 事件后的 5,420 条 validation，test 不参与调参。</p></div>
+<details class="handoff-document" id="training-handoff-document"><summary>展开完整训练交接文档：数据、指标、命令与下一步</summary><h3>Polymarket 交接：三种 LLM 比较已完成，后续实验待开展</h3>
+<p>Luna、Terra、Sol 的英文 full training-free 预测均已完成，使用同一 200 条 validation、1,400 个未来价格点。逐日评分、四类预测前分层及两组 Ridge 数值训练也已完成。不再把这些工作列为待执行任务；当前没有新的模型调用需要补跑，test 未运行。</p>
+<p>详细结果：<a href="../data/forecast_model_comparison_zh.md">三种 LLM 与数值对照比较</a>。网页：<a href="https://economicworldmodel.github.io/graph/#forecast-ready">训练交接</a>、<a href="https://economicworldmodel.github.io/graph/#training-free-results">六组结果与中英文 prompt</a>。</p>
+<h4>已有结果</h4>
 <table>
 <thead>
 <tr>
-<th>本轮报告项</th>
-<th style="text-align: right;">Luna full</th>
-<th style="text-align: right;">Persistence</th>
-<th>如何解释</th>
+<th>方法</th>
+<th style="text-align: right;">RMSE（价格百分点）</th>
+<th style="text-align: right;">MAE（价格百分点）</th>
+<th style="text-align: right;">MSE skill</th>
+<th style="text-align: right;">覆盖率</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>RMSE（价格百分点）</td>
-<td style="text-align: right;">8.82</td>
-<td style="text-align: right;">8.56</td>
-<td>主要展示，恢复到价格单位，对大误差敏感</td>
+<td>Persistence</td>
+<td style="text-align: right;">8.557</td>
+<td style="text-align: right;">4.549</td>
+<td style="text-align: right;">+0.00%</td>
+<td style="text-align: right;">100%</td>
 </tr>
 <tr>
-<td>MAE（价格百分点）</td>
-<td style="text-align: right;">4.78</td>
-<td style="text-align: right;">4.55</td>
-<td>平均绝对偏离，补充解释</td>
-</tr>
-<tr>
-<td>MSE（原始价格平方）</td>
-<td style="text-align: right;">0.007784</td>
-<td style="text-align: right;">0.007323</td>
-<td>保留原分数，并与训练目标对应</td>
-</tr>
-<tr>
-<td>MSE skill</td>
+<td>Luna full</td>
+<td style="text-align: right;">8.823</td>
+<td style="text-align: right;">4.782</td>
 <td style="text-align: right;">-6.30%</td>
-<td style="text-align: right;">0%</td>
-<td>定义仍为 1 − MSE_model / MSE_persistence，不替换成 RMSE 比值</td>
+<td style="text-align: right;">100%</td>
+</tr>
+<tr>
+<td>Terra full</td>
+<td style="text-align: right;">8.707</td>
+<td style="text-align: right;">4.686</td>
+<td style="text-align: right;">-3.53%</td>
+<td style="text-align: right;">100%</td>
+</tr>
+<tr>
+<td>Sol full</td>
+<td style="text-align: right;">8.752</td>
+<td style="text-align: right;">4.601</td>
+<td style="text-align: right;">-4.60%</td>
+<td style="text-align: right;">100%</td>
+</tr>
+<tr>
+<td>Ridge 价格</td>
+<td style="text-align: right;">8.662</td>
+<td style="text-align: right;">4.585</td>
+<td style="text-align: right;">-2.46%</td>
+<td style="text-align: right;">100%</td>
+</tr>
+<tr>
+<td>Ridge 完整量价</td>
+<td style="text-align: right;">8.633</td>
+<td style="text-align: right;">4.562</td>
+<td style="text-align: right;">-1.78%</td>
+<td style="text-align: right;">100%</td>
 </tr>
 </tbody>
 </table>
-<p>价格百分点 = 原始价格误差 ×100，不是相对涨跌百分比。先在同一批有效评分点上计算 pooled MSE，再开平方得到 pooled RMSE；不能把各窗口 RMSE 的平均值当作同一指标。整体、逐预测日及分层结果分别计算，始终对齐样本与 mask。另保留等 market / parent event 的宏平均 MSE，明确聚合方式。</p>
-<p>训练仍使用 masked MSE，标签全部有效时等于 MSE；validation 选 checkpoint 仍使用相同评分点上的 pooled MSE。因为平方根单调，改用对应 pooled RMSE 不会改变模型或 checkpoint 排名。此次没有改用 MAE loss，也没有因此启动训练。</p>
+<p>三种 LLM 中，Terra 的 MSE/RMSE 最低，Sol 的 MAE 最低；全部六组中，persistence 的 MSE/RMSE、MAE 均最低。这是当前 validation 上的点估计排序，不代表模型之间差异已达到统计显著。也不能由一次没有增益的实验推断训练必然无用。</p>
+<p>Terra 平均耗时 8.767 秒/条，Sol 为 11.310 秒/条，Luna 原运行约 11.316 秒/条。不同运行时间、服务负载和服务版本可能影响比较，不能据此宣布固定的模型速度差异。Terra 有一次恢复成功的 TLS 重连；两种新增模型均无终态失败，日志中无工具调用。未提供实际账单，不报告推测费用。</p>
+<h4>后续尚未完成的工作</h4>
 <table>
 <thead>
 <tr>
-<th>下一步</th>
-<th>使用哪些现成内容</th>
-<th>是否重新调用 Luna</th>
-<th>交付</th>
+<th>工作</th>
+<th>要回答的问题</th>
+<th>使用的数据与边界</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>整理当前成绩</td>
-<td>已有 predictions、labels、metrics</td>
-<td>不需要</td>
-<td>RMSE/MAE 价格百分点、MSE skill、覆盖率、逐日结果</td>
+<td>同模型输入消融</td>
+<td>问题文本和活动特征分别有没有预测增益？</td>
+<td>固定一个模型，比较 price-only、price-question 与已有 full；不要同时改变模型和输入；需要新增调用，尚未启动</td>
 </tr>
 <tr>
-<td>补充分层报告</td>
-<td>原预测与预测前价格、历史波动、成交规模、价格年龄</td>
-<td>不需要</td>
-<td>每层样本数、两模型误差与配对差异；已有事件 bootstrap 保留</td>
+<td>冻结 LLM 的数值预测头</td>
+<td>数值输出方式或可训练映射能否改善价格预测？</td>
+<td>用 train 训练，独立 validation 子集选 checkpoint，同一 pilot 比较；尚未训练实际预训练 LLM 的预测头</td>
 </tr>
 <tr>
-<td>训练便宜的数值对照</td>
-<td>train 训练，validation 选型，保持同一 200 条比较清单</td>
-<td>不需要</td>
-<td>价格/完整量价的线性、Ridge 或 DLinear 对照，检查有无可学习增量</td>
-</tr>
-<tr>
-<td>检查 Luna 输入增益</td>
-<td>同一 200 条，新增 price-only 和 price-question 两组</td>
-<td>需要，仅运行新增组</td>
-<td>与已有 full 组比较；冻结其余模型设置并记录调用时间和成本</td>
+<td>主题覆盖与额外证据</td>
+<td>哪些任务可能需要新闻或跨事件信息？</td>
+<td>数值分层已完成；主题覆盖、历史可用证据与检索实验仍待做</td>
 </tr>
 <tr>
 <td>最终 test</td>
-<td>选定模型、prompt 和设置后使用固定 test 清单</td>
-<td>若评测 Luna，需要新的 test 预测</td>
-<td>一次最终评价；不能直接复用 validation 预测</td>
+<td>选定方法是否能在未用于调参的数据上保持表现？</td>
+<td>设置确定后再运行，当前不打开 test 做模型选型</td>
 </tr>
 </tbody>
 </table>
-<p>前两项和小数值模型对照现已完成；下一步可训练冻结 LLM 数值头，并另行安排 Luna 输入消融。训练头的 validation 选型使用 <code>runs/polymarket_head_ready_v1/validation_tuning/</code> 的 5,420 条，排除固定 pilot 的全部 parent events，避免同事件调参与比较混用；不要再次运行完全相同的 full 组来“获得 RMSE”。只有明确要测随机性或重复性时，才单独设计重复调用实验，不能把重复调用当作指标重算。若模型服务版本已变化，后续消融须注明不同调用时间的限制，不能把所有差异都归因于输入。</p>
-<p>可以把下面这段交给后续对话：</p>
-<blockquote>
-<p>请使用已有 Luna full 200 条 validation 的 predictions.jsonl 与对应标签整理评测报告，不重新调用模型。主要展示 RMSE 和 MAE 的价格百分点，同时保留 MSE、MSE skill、覆盖率和逐日结果；在同一批样本上按预测前价格位置、历史波动、成交规模和价格年龄分层，并与 persistence 对齐比较。不要用未来大波动筛选新的评测清单。完成后再单独安排小数值模型训练和 Luna 输入消融，test 暂不运行。</p>
-</blockquote>
-<h4>数据在哪里，分别放了什么</h4>
-<p>数据根目录：<code>runs/polymarket_forecast_v1/</code>。</p>
-<table>
-<thead>
-<tr>
-<th>划分</th>
-<th style="text-align: right;">完整样本数</th>
-<th style="text-align: right;">小样本数</th>
-<th style="text-align: right;">小样本中的 parent event 数</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>train</td>
-<td style="text-align: right;">212,393</td>
-<td style="text-align: right;">200</td>
-<td style="text-align: right;">149</td>
-</tr>
-<tr>
-<td>validation</td>
-<td style="text-align: right;">13,831</td>
-<td style="text-align: right;">200</td>
-<td style="text-align: right;">124</td>
-</tr>
-<tr>
-<td>test</td>
-<td style="text-align: right;">137,094</td>
-<td style="text-align: right;">1,000</td>
-<td style="text-align: right;">491</td>
-</tr>
-</tbody>
-</table>
-<p>每个完整划分下有 <code>inputs.parquet</code>、<code>labels.parquet</code> 和 <code>prompts.parquet</code>。完整 prompt 现在也逐条保存：<code>input_prompt</code> 用于冻结 LLM 编码，<code>training_free_prompt</code> 在同一历史内容后加上七个价格的 JSON 输出要求；两列均不含未来标签。<code>sample_id</code> 与结构化输入、标签一一对应。运行脚本仍从结构化输入调用同一个模板生成文本，导出检查会逐条验证两者相同。仅完整量价的 full 输入保存全量 prompt；price-only 和 price-question 对照按需生成。小样本位于 <code>pilot/{train,validation,test}/</code>，分别提供 <code>inputs.jsonl</code>、<code>labels.scorer_only.jsonl</code>、<code>manifest.jsonl</code> 和一份完整的 <code>example_prompt.txt</code>。完整数据使用 Parquet 节省空间；小样本使用 JSONL，方便检查和逐条调用。三份完整 prompt 文件合计约 92.5 MB，共 363,318 行，每行包含两种用途的完整文本；导出和逐条比对记录见 <code>runs/polymarket_forecast_v1/prompt_export_report.json</code>。</p>
-<p><code>inputs</code> 保存问题、价格对应的 outcome、预测时间，以及 <code>features[10][11]</code> 和同形状的 <code>feature_mask</code>。11 列依次是价格、日成交额、成交笔数、过去 7/30 日成交额、相对成交量、异常成交量、事件内份额、盘口在平台内份额、事件在平台内份额、价格年龄。历史行按 Day -9 到 Day 0 排列。成交额、笔数、相对成交量取 log1p；价格年龄先换算为小时再取 log1p；异常量保留符号，份额保留原比例。不可用的数值填 0，但对应 mask=false；转成 prompt 时显示 MISSING。文本使用 9 位有效数字，避免把很小的平台份额四舍五入为零。没有使用全数据拟合的归一化参数。</p>
-<p><code>labels</code> 单独保存未来七天的 <code>target_price</code>、<code>target_mask</code>、评分分组字段和最后一个历史价格。当前来自 dense 窗口的七个标签都有效，因此 masked MSE 等于普通 MSE。未来成交额、份额和异常活动没有放进输入，也不是本轮预测目标。</p>
-<p>恢复了原始时间划分，剔除 1,697 条跨越时间边界的窗口。完整历史与七天标签都位于所属划分；三个划分的 parent event ID 没有交集。这里的 event 分组还不是人工合并的语义事件族。同一事件内部的窗口仍有重叠，不能把所有窗口视作独立实验。</p>
-<p>小样本是对排序后的 ID 使用固定种子 <code>20260909</code> 均匀抽样，没有按未来变化筛选。它保留了“窗口多的事件更容易入选”的分布，并非主题或活跃度分层抽样；正式论文仍需检查覆盖和事件层面的误差。测试清单已固定，但本轮没有运行测试集模型评分。</p>
-<h4>原 Luna 调用命令：仅在明确需要新预测时执行</h4>
-<p>以下是已完成的首轮调用说明，保留用于复现；当前整理 RMSE/MAE 不执行这段调用任务：</p>
-<blockquote>
-<p>请阅读 docs/2026-09-09-polymarket-training-handoff.md，先用现有脚本调用 gpt-5.6-luna，对固定 validation 输入的前 5 条做 training-free 预测。使用 full 输入，不改 prompt，不读取标签辅助回答。预测子进程只接收单条历史 prompt；保存模型输出后，再调用独立评分脚本读取标签，报告 MSE、MAE、相对 persistence 的 skill、有效输出覆盖率和调用耗时。模型不可用时报告实际错误，不悄悄替换模型。先检查这 5 条的调用与格式，再运行完整 200 条 validation；测试集留到输入和设置确定后使用。</p>
-</blockquote>
-<p>在仓库根目录运行：</p>
-<pre><code class="language-bash">export PYTHONPATH=&quot;$PWD/src&quot;
-python scripts/run_polymarket_training_free.py \
-  --inputs runs/polymarket_forecast_v1/pilot/validation/inputs.jsonl \
-  --out-dir runs/polymarket_luna_validation_5 \
-  --model gpt-5.6-luna --arm full --limit 5
-
-python scripts/score_polymarket_forecast.py \
-  --labels runs/polymarket_forecast_v1/pilot/validation/labels.scorer_only.jsonl \
-  --selected-inputs runs/polymarket_luna_validation_5/selected_inputs.jsonl \
-  --predictions runs/polymarket_luna_validation_5/predictions.jsonl \
-  --out-dir runs/polymarket_luna_validation_5
-</code></pre>
-<p>预览而不调用模型：在预测命令末尾加 <code>--prepare-only</code>。本轮预览已放在 <code>reports/polymarket_forecast_v1/luna_preview/prompts.jsonl</code>。预测输出为 <code>{"predicted_price":[七个数]}</code>；运行器再补上样本 ID 和预测时间，用来与标签对齐。</p>
-<p>运行全部 200 条 validation：改为 <code>--limit 0</code>，并使用新输出目录。最终测试：把输入和标签路径中的 <code>validation</code> 改为 <code>test</code>，使用新目录和 <code>--limit 0</code>。重复相同命令会跳过已完成样本；改变模型、输入形式或样本数时必须使用新目录。默认只跑 5 条，避免一开始提交上千次调用。</p>
-<p>预测运行器不会加载标签。每条预测启动临时目录中的 Codex 子进程，并检查日志；发现工具调用就不接纳该回答。临时目录和只读模式不是文件读取隔离保证，真正的实验约束是只给历史 prompt、禁止工具并检查实际日志。历史问题文本仍可能唤起模型预训练时见过的信息，因此本轮是历史回测，不能声称消除了模型记忆污染。</p>
-<p><code>--arm full</code> 使用完整量价和问题；<code>price-question</code> 使用价格与问题；<code>price-only</code> 只用匿名价格。比较时使用同一输入文件和同样的 limit。其他结果不能作为这批样本的直接对照。</p>
-<p>数值对照用同一预测入口，把 <code>--method</code> 换成 <code>persistence</code> 或 <code>last-step-drift</code>，不调用 LLM。固定 200 条 validation 的 persistence 已运行，结果见 <code>reports/polymarket_forecast_v1/persistence_validation/metrics.json</code>。评分按事先选定的输入清单计算覆盖率，不会只对成功输出的 ID 悄悄缩小评测集合。</p>
-<h4>训练预测头怎么运行</h4>
-<p>第一版只训练预测头，冻结 LLM。这样同一份 hidden state 可以缓存复用，避免每个 epoch 重复跑整个 LLM。结构为：</p>
-<pre><code class="language-text">完整历史 prompt → tokenizer → 冻结的 decoder LLM
-→ 最后一个有效输入 token 的 hidden state [d]
-→ Linear(d,128) → GELU → Linear(128,7) → Sigmoid
-→ 未来七天价格
-</code></pre>
-<p>标签只进入 loss。默认 AdamW、学习率 0.001、batch 32、最多 20 epochs；validation MSE 连续 3 次不改善即停止，保存 validation 最好的预测头。这些是初始设置，不是已经验证最优的参数。本轮没有加入 LoRA，也没有训练 LLM 本体。</p>
-<p>安装训练依赖，并指定你要使用的本地 decoder 模型目录或 Hugging Face 模型 ID：</p>
-<pre><code class="language-bash">python -m pip install -e '.[forecast]'
-export PYTHONPATH=&quot;$PWD/src&quot;
-export FORECAST_MODEL=/absolute/path/to/your/decoder-model
-
-for split in train validation test; do
-  python scripts/train_polymarket_head.py encode \
-    --inputs &quot;runs/polymarket_forecast_v1/pilot/$split/inputs.jsonl&quot; \
-    --model &quot;$FORECAST_MODEL&quot; --arm full \
-    --output &quot;runs/polymarket_head_v1/$split.pt&quot;
-done
-
-python scripts/train_polymarket_head.py train \
-  --train-cache runs/polymarket_head_v1/train.pt \
-  --validation-cache runs/polymarket_head_v1/validation.pt \
-  --train-labels runs/polymarket_forecast_v1/pilot/train/labels.scorer_only.jsonl \
-  --validation-labels runs/polymarket_forecast_v1/pilot/validation/labels.scorer_only.jsonl \
-  --out-dir runs/polymarket_head_v1/model
-
-python scripts/train_polymarket_head.py predict \
-  --checkpoint runs/polymarket_head_v1/model/best_head.pt \
-  --cache runs/polymarket_head_v1/test.pt \
-  --output runs/polymarket_head_v1/test.predictions.jsonl
-
-python scripts/score_polymarket_forecast.py \
-  --labels runs/polymarket_forecast_v1/pilot/test/labels.scorer_only.jsonl \
-  --selected-inputs runs/polymarket_forecast_v1/pilot/test/inputs.jsonl \
-  --predictions runs/polymarket_head_v1/test.predictions.jsonl \
-  --out-dir runs/polymarket_head_v1/test_score
-</code></pre>
-<p>上面是小样本训练入口；正式训练将 train/validation 的输入和标签换成对应完整 Parquet，重新编码并使用新目录。测试输入的冻结编码不读取标签，也不更新参数。<code>encode</code> 默认 batch 4，可按显存调整；不要假定整个训练集缓存或模型都适合当前 GPU。脚本不截断历史，超过默认 8,192 token 时直接提示调整。这里只支持能通过 AutoModel 返回 <code>last_hidden_state</code> 的 decoder 模型，按普通文本编码，未使用聊天模板；确定模型后应固定模型版本和 tokenizer。相关接口依据 <a href="https://huggingface.co/docs/transformers/model_doc/auto">Transformers Auto Classes</a> 与 <a href="https://huggingface.co/docs/transformers/main_classes/model">模型加载文档</a>。</p>
-<h4>本轮实际验证到哪里</h4>
+<p>优先固定对照和训练目标，再启动其中一项；不因为 Terra 或 Sol 的某个分数略低，就直接选作最终模型。当前不重复调用任何已完成的 full 组，不重新训练同一组 Ridge。</p>
+<h4>固定输入与评分方式</h4>
+<p>输入：<code>runs/polymarket_forecast_v1/pilot/validation/inputs.jsonl</code>。标签：同目录 <code>labels.scorer_only.jsonl</code>，只供训练监督或预测完成后的独立评分，不能放进 prompt。</p>
+<p>模型读取盘口问题、outcome，以及过去 10 个完整 UTC 日的 11 个量价特征和缺失标记；输出未来 7 日同一 outcome 的价格，范围 0–1。特征为价格、日成交额与笔数、7/30 日成交额、相对与异常成交量、三类成交份额和价格年龄。数值变换与 MISSING 约定保持不变。</p>
+<p>三种 LLM 使用同一英文 <code>prompt(record, 'full', True)</code>、low reasoning 和 fast service tier；调用记录标注 CLI 0.153.4。无法确认后端服务版本完全相同，不将跨时间比较解释成严格控制的架构实验。中文 prompt 仅是阅读翻译，没有测试中文效果。历史文本可能唤起模型预训练记忆，因此仍属历史回测。</p>
+<p>主要展示 pooled RMSE，补充 MAE；二者乘 100 转成价格百分点，不是相对涨跌百分比。保留 MSE 和 <code>skill = 1 - MSE_model / MSE_persistence</code>。所有比较对齐样本、horizon 和 mask，另外报告逐日、market / parent event 宏平均与分层结果；不能用逐窗口 RMSE 的平均值替代 pooled RMSE。</p>
+<h4>数据、代码与结果位置</h4>
 <ul>
-<li>全量输入/标签、时间边界、重复 ID、事件交集检查：<code>reports/polymarket_forecast_v1/dataset_acceptance.json</code>。</li>
-<li>九项单元/集成测试覆盖 loss、评分、padding pooling、prompt 特征与预测头训练/保存/加载。</li>
-<li>用本地随机初始化的小型 GPT-2 模型编码了两条真实完整 prompt，验证 tokenizer → backbone → pooling 的接口；这是软件检查，不是预训练 LLM 的预测效果。</li>
-<li>固定 validation 上的 persistence 运行与独立评分、Luna 五条 prompt 预览已完成。</li>
-<li>后续对话已完成指定 Luna 的 5 条与 200 条 validation；两组 Ridge 数值模型也已训练；实际预训练 LLM 预测头仍未训练，test 未运行。</li>
+<li>完整数据：<code>runs/polymarket_forecast_v1/{train,validation,test}/</code>，分别为 212,393 / 13,831 / 137,094 条。每份均有 <code>inputs.parquet</code>、独立 <code>labels.parquet</code> 和完整 <code>prompts.parquet</code>。</li>
+<li>预测头选型数据：<code>runs/polymarket_head_ready_v1/validation_tuning/</code>，5,420 条，排除固定 pilot 的全部 parent events。</li>
+<li>三种 LLM 原始运行：<code>runs/polymarket_{luna,terra,sol}_validation_200/</code>，保留预测、指标、prompt 和耗时日志。</li>
+<li>最新六组比较：<code>reports/polymarket_training_free_model_comparison_v1/</code>，包括 <code>report.json</code>、<code>overall.csv</code>、<code>by_horizon.csv</code>、<code>strata.csv</code>、<code>point_errors.parquet</code>、<code>comparison_zh.md</code>。</li>
+<li>独立评分：<code>scripts/score_polymarket_forecast.py</code>；现有预测足以重算 RMSE/MAE，不需要调用模型。</li>
+<li>后续预测头入口：<code>scripts/run_polymarket_head_next.sh</code>。需先指定 <code>FORECAST_MODEL</code>；结构为冻结 decoder LLM → 最后有效 token hidden state → Linear(d,128) → GELU → Linear(128,7) → Sigmoid，loss 为 masked MSE。脚本只比较 validation pilot，不评分 test。</li>
 </ul>
-<p>重建数据与检查：</p>
-<pre><code class="language-bash">PYTHONPATH=src python scripts/build_polymarket_forecast_dataset.py
-PYTHONPATH=src python scripts/export_polymarket_full_prompts.py
-PYTHONPATH=src python scripts/check_polymarket_forecast_dataset.py
-PYTHONPATH=src pytest -q tests/test_polymarket_forecasting.py tests/test_polymarket_path_metrics.py
-</code></pre>
-<p>这一步把“准备训练和测试”拆成了可检查的三件事：模型实际看到什么、答案在哪里、预测完成后如何评分。三者分开之后，training-free 与训练预测头才有可比较的输入和结果。</p></details>
+<p>完整数据和训练代码已通过加密包交接；此前包是历史快照，不包含之后新增的 Terra/Sol 结果及本文修订。后续对话以当前工作区和最新比较报告为准。</p></details>
 </section>
 
 <section class="section shell activity-feature-release" id="training-free-results">
-<div class="section-heading"><div><p class="eyebrow">VALIDATION RESULTS · 2026-09-09</p><h2>不训练的 Luna，是否超过保持原价？</h2></div><p>复用现有 200 条完整量价预测；本轮新增 LLM 调用为 0。另完成两组小数值模型训练，test 尚未评分。</p></div>
-<div class="table-wrap"><table aria-label="同一样本预测结果"><thead><tr><th>方法</th><th>RMSE（价格百分点）</th><th>MAE（价格百分点）</th><th>MSE skill</th></tr></thead><tbody><tr><td>Persistence</td><td>8.557</td><td>4.549</td><td>+0.00%</td></tr><tr><td>Luna full (no training)</td><td>8.823</td><td>4.782</td><td>-6.30%</td></tr><tr><td>Ridge: prices</td><td>8.662</td><td>4.585</td><td>-2.46%</td></tr><tr><td>Ridge: price + activity</td><td>8.633</td><td>4.562</td><td>-1.78%</td></tr></tbody></table></div>
-<p class="table-note">四组均为 200/200 有效输出、1,400 个评分点。Luna 使用 gpt-5.6-luna、英文 full prompt、low reasoning；原运行累计调用耗时 2,263.117 秒，平均 11.316 秒/条，工具事件为 0。Ridge 是已训练的数值对照，不属于 training-free LLM。</p>
-<div class="orientation-note"><span>WHAT THIS MEANS</span><p>当前 Luna 和两组 Ridge 都没有超过 persistence。MSE 小不等于高准确率：Luna RMSE 为 8.82 个价格百分点。此前按事件 bootstrap 的 Luna skill 区间跨零，尚不能断言模型稳定更差；也不能据此认定训练没有必要。</p></div>
-<img src="../data/forecast_rmse_by_horizon.png" alt="四种方法在未来第一至第七天的 RMSE 比较" style="display:block;max-width:100%;height:auto;margin:24px auto">
-<div class="field-meaning-grid"><article><span>BEFORE PREDICTION</span><h3>分层检查已完成</h3><p>按预测前价格位置、十天历史波动、日成交额和价格年龄分层；保存各组数量、逐日误差和事件成组配对区间。成交额 1,000–10,000 美元组有正 skill 点估计，但区间跨零，不能认定稳定有效。</p></article><article><span>NUMERICAL TRAINING</span><h3>两组 Ridge 对照</h3><p>212,393 条 train 拟合；使用排除 pilot 全部 parent events 后的 5,420 条 validation 选正则强度。价格组 10 维，完整量价及 mask 组 220 维；均预测七日残差。模型已保存并检查重新加载。</p></article><article><span>NEXT TRAINING</span><h3>保留对照，再训练预测头</h3><p>下一步可用冻结 LLM hidden state 加七维数值头，与当前方法比较。Luna 输入消融尚未运行；主题覆盖、跨事件检索与最终 test 仍待完成。</p></article></div>
+<div class="section-heading"><div><p class="eyebrow">SIX-METHOD VALIDATION · 2026-09-09</p><h2>Luna、Terra、Sol：是否超过保持原价？</h2></div><p>同一 200 条 validation、1,400 个未来价格点；三种 LLM 使用相同英文 full prompt。test 未运行。</p></div>
+<div class="table-wrap"><table aria-label="六组预测方法比较"><thead><tr><th>方法</th><th>RMSE（价格百分点）</th><th>MAE（价格百分点）</th><th>MSE skill</th><th>覆盖率</th></tr></thead><tbody><tr><td>Persistence</td><td>8.557</td><td>4.549</td><td>+0.00%</td><td>100%</td></tr><tr><td>Luna full</td><td>8.823</td><td>4.782</td><td>-6.30%</td><td>100%</td></tr><tr><td>Terra full</td><td>8.707</td><td>4.686</td><td>-3.53%</td><td>100%</td></tr><tr><td>Sol full</td><td>8.752</td><td>4.601</td><td>-4.60%</td><td>100%</td></tr><tr><td>Ridge 价格</td><td>8.662</td><td>4.585</td><td>-2.46%</td><td>100%</td></tr><tr><td>Ridge 完整量价</td><td>8.633</td><td>4.562</td><td>-1.78%</td><td>100%</td></tr></tbody></table></div>
+<div class="orientation-note"><span>READ THE RANKING</span><p>三种 LLM 中，Terra 的 RMSE 最低，Sol 的 MAE 最低；六组整体比较，persistence 的两项指标均最低。当前未观察到超过保持原价的整体增益，点估计排序不代表差异已达到统计显著，也不能证明训练必然无效。</p></div>
+<p class="table-note">模型设置：英文 full、low reasoning、fast service tier。Terra / Sol 平均耗时分别为 8.767 / 11.310 秒每条；Luna 原运行约 11.316 秒。运行时间与服务负载不同，不将耗时视为固定速度排名。所有组均完成 200/200；Terra 与 Sol 日志无工具调用、无终态失败。</p>
+<img src="../data/forecast_rmse_by_horizon.png?v=six-models-20260909" alt="六种方法未来第一至第七天的 RMSE" style="display:block;max-width:100%;height:auto;margin:24px auto">
+<div class="field-meaning-grid"><article><span>COMPLETED</span><h3>三种 LLM 与两组 Ridge</h3><p>Luna、Terra、Sol 的 full 预测已完成；价格与完整量价 Ridge 已训练。已有价格位置、历史波动、成交额与价格年龄四类分层及事件成组配对区间。</p></article><article><span>BOUNDARIES</span><h3>结果属于 validation 回测</h3><p>历史文本可能激活模型预训练记忆；不同事件仍可能相关。分层结果不作多重比较校正，不能用少数正 skill 分组宣布稳定有效。中文 prompt 尚未测试。</p></article><article><span>NEXT</span><h3>固定模型，再检查输入与训练</h3><p>后续工作：同模型输入消融、冻结 LLM 数值头、主题覆盖和额外证据。不要重复已完成的 full 调用；test 留到设置确定之后。</p></article></div>
 <details><summary>查看中文完整 prompt（阅读翻译，尚未测试中文效果）</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.7">说明：以下为阅读用中文翻译；已报告 Luna 成绩使用英文 prompt，尚未测试中文版本。
 
 【任务】
@@ -416,7 +314,8 @@ the seven values do not need to sum to one.
 Forecast:
 Return one JSON object only: {&quot;predicted_price&quot;: [p1,p2,p3,p4,p5,p6,p7]}. Replace each placeholder with a number in [0,1].
 </pre></details>
-<div class="hero-actions"><a class="button primary" href="../data/forecast_no_call_results.md">完整实验说明</a><a class="button secondary" href="../data/forecast_strata.csv">下载分层结果 CSV</a><a class="text-link" href="../data/forecast_by_horizon.csv">逐日结果 →</a><a class="text-link" href="../data/forecast_prompt_zh.txt">中文 prompt 文本 →</a></div>
+<div class="hero-actions"><a class="button primary" href="../data/forecast_training_free_comparison.md">完整比较报告</a><a class="button secondary" href="../data/forecast_strata.csv">下载分层结果 CSV</a><a class="text-link" href="../data/forecast_by_horizon.csv">逐日结果 →</a><a class="text-link" href="../data/forecast_results.json">机器可读结果 →</a></div>
+<div class="hero-actions"><a class="text-link" href="../data/forecast_results.json">完整比较 JSON →</a><a class="text-link" href="../data/forecast_overall.csv">整体结果 CSV →</a></div>
 </section>
       <section class="section shell" id="pipeline">
         <div class="section-heading">
