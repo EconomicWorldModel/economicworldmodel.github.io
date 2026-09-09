@@ -1,10 +1,20 @@
-# 先用 Luna 跑不训练的预测，再比较预测头
+# Polymarket 训练交接：已有结果与下一步预测头实验
 
 > 实验更新：无需再次调用 Luna 的数值分层与两组 Ridge 训练已完成，见[本轮结果](2026-09-09-polymarket-no-call-results.md)。Luna full 已完成 200 条 validation，MSE 0.007784、skill -6.30%；不能据此认定精度已高或无需训练，见[数据波动与任务难度复查](2026-09-09-polymarket-luna-difficulty-review.md)。下文命令保留为复运行入口。
 
 现在已经把数据落盘，并写好了两条可运行的路径。两条路径都输入一个盘口过去 10 天的信息，输出未来 7 天的价格。Luna 直接读 prompt 返回 JSON；开源 LLM 则先提取 hidden state，再训练一个七维预测头。Luna 这条路径不需要训练集，也不需要安装 Transformers。
 
-## 当前实验安排：先整理已有结果，不重复调用 full Luna
+## 当前进度与下一步入口
+
+完整数据、prompt、Luna full 200 条 validation、四类数值分层和两组 Ridge 对照均已完成。现在不需要重复调用 Luna，也不需要再训练同一组 Ridge。
+
+下一步训练入口为 `scripts/run_polymarket_head_next.sh`：使用 212,393 条 train 拟合冻结 LLM 的七维预测头，使用排除 pilot 所属事件后的 5,420 条 validation 选 checkpoint，再在固定 200 条 pilot 上比较。test 暂不评分。先设置 `FORECAST_MODEL`，具体命令见后文；完整数据和代码也已提供加密交接包。
+
+当前比较：persistence / Luna / Ridge 价格 / Ridge 完整量价的 RMSE 分别为 8.557 / 8.823 / 8.662 / 8.633 个价格百分点，尚无超越 persistence 的整体结果。训练完成后仍按同一口径比较，不能把训练完成等同于有效提升。
+
+网页入口：[Graph Atlas 训练交接](https://economicworldmodel.github.io/graph/#forecast-ready)；结果入口：[validation 比较与中英文 prompt](https://economicworldmodel.github.io/graph/#training-free-results)。
+
+## 评测安排与执行状态
 
 本次改为主要展示 RMSE，同时报告 MAE，不需要重新生成预测。已有 `runs/polymarket_luna_validation_200/metrics.json` 已包含二者；如果需要统一评分版本或增加分层，只读取保存的预测与标签重新评分。更换展示指标不改变原 prompt、样本或模型输出。
 
