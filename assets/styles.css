@@ -423,3 +423,22 @@ footer a { color: var(--lime); }
   .demo-boundary { grid-template-columns: 1fr; }
   .pipeline { grid-template-columns: 1fr; }
 }
+
+/* Readable prompts and training commands on light sections. */
+#training-free-results details { margin:20px 0; }
+#training-free-results summary { cursor:pointer; font-size:16px; font-weight:700; line-height:1.7; color:#163a2b; }
+#training-free-results details pre,
+#forecast-ready .handoff-document pre {
+  color:#18382c; background:#fff; border:1px solid #c4cec4;
+  border-radius:6px; margin:14px 0 24px; padding:22px;
+  min-height:0; max-height:none; font-size:15px !important;
+  line-height:1.85 !important; font-weight:400;
+  font-family:ui-monospace,"Cascadia Code","Noto Sans SC","Microsoft YaHei",monospace;
+  white-space:pre-wrap; overflow-wrap:anywhere;
+}
+#forecast-ready code { color:#245b42; }
+#training-free-results details pre code,
+#forecast-ready .handoff-document pre code { color:inherit; background:transparent; }
+@media(max-width:600px) {
+  #training-free-results details pre, #forecast-ready .handoff-document pre { padding:16px; }
+}
