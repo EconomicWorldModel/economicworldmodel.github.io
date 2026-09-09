@@ -12,7 +12,7 @@
 | validation | 13,831 | 200 | 124 |
 | test | 137,094 | 1,000 | 491 |
 
-每个完整划分下有 `inputs.parquet`、`labels.parquet` 和 `prompts.parquet`。完整 prompt 现在也逐条保存：`input_prompt` 用于冻结 LLM 编码，`training_free_prompt` 在同一历史内容后加上七个价格的 JSON 输出要求；两列均不含未来标签。`sample_id` 与结构化输入、标签一一对应。运行脚本仍从结构化输入调用同一个模板生成文本，导出检查会逐条验证两者相同。仅完整量价的 full 输入保存全量 prompt；price-only 和 price-question 对照按需生成。小样本位于 `pilot/{train,validation,test}/`，分别提供 `inputs.jsonl`、`labels.scorer_only.jsonl`、`manifest.jsonl` 和一份完整的 `example_prompt.txt`。完整数据使用 Parquet 节省空间；小样本使用 JSONL，方便检查和逐条调用。
+每个完整划分下有 `inputs.parquet`、`labels.parquet` 和 `prompts.parquet`。完整 prompt 现在也逐条保存：`input_prompt` 用于冻结 LLM 编码，`training_free_prompt` 在同一历史内容后加上七个价格的 JSON 输出要求；两列均不含未来标签。`sample_id` 与结构化输入、标签一一对应。运行脚本仍从结构化输入调用同一个模板生成文本，导出检查会逐条验证两者相同。仅完整量价的 full 输入保存全量 prompt；price-only 和 price-question 对照按需生成。小样本位于 `pilot/{train,validation,test}/`，分别提供 `inputs.jsonl`、`labels.scorer_only.jsonl`、`manifest.jsonl` 和一份完整的 `example_prompt.txt`。完整数据使用 Parquet 节省空间；小样本使用 JSONL，方便检查和逐条调用。三份完整 prompt 文件合计约 92.5 MB，共 363,318 行，每行包含两种用途的完整文本；导出和逐条比对记录见 `runs/polymarket_forecast_v1/prompt_export_report.json`。
 
 `inputs` 保存问题、价格对应的 outcome、预测时间，以及 `features[10][11]` 和同形状的 `feature_mask`。11 列依次是价格、日成交额、成交笔数、过去 7/30 日成交额、相对成交量、异常成交量、事件内份额、盘口在平台内份额、事件在平台内份额、价格年龄。历史行按 Day -9 到 Day 0 排列。成交额、笔数、相对成交量取 log1p；价格年龄先换算为小时再取 log1p；异常量保留符号，份额保留原比例。不可用的数值填 0，但对应 mask=false；转成 prompt 时显示 MISSING。文本使用 9 位有效数字，避免把很小的平台份额四舍五入为零。没有使用全数据拟合的归一化参数。
 
