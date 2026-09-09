@@ -110,6 +110,22 @@
       </div>
     </section>
 
+
+    <section class="section shell activity-feature-release" id="forecast-ready">
+      <div class="section-heading"><div><p class="eyebrow">FORECAST DATA · 2026-09-09</p><h2>从量价数据到模型输入：过去 10 天，预测未来 7 天</h2></div>
+      <p>训练、验证、测试数据与完整 prompt 已准备；当前先做历史价格预测，尚未得到 LLM 的正式比较结果。</p></div>
+      <div class="table-wrap"><table aria-label="预测数据划分"><thead><tr><th>划分</th><th>完整样本</th><th>固定试跑样本</th></tr></thead><tbody>
+      <tr><td>Train</td><td>212,393</td><td>200</td></tr><tr><td>Validation</td><td>13,831</td><td>200</td></tr><tr><td>Test</td><td>137,094</td><td>1,000</td></tr></tbody></table></div>
+      <div class="field-meaning-grid">
+      <article><span>INPUT</span><h3>10 天 × 11 个量价特征</h3><p>盘口问题与结果方向，加上价格、日成交额与笔数、7/30 日成交规模、相对与异常量、三类成交份额和真实价格年龄。缺失值在 prompt 中写作 MISSING。</p></article>
+      <article><span>OUTPUT</span><h3>七个未来价格</h3><p>同一盘口未来七个完整 UTC 日的价格，范围 0–1。标签单独保存，只用于训练 loss 或预测后的评分。MSE 为主要指标，MAE 补充评价。</p></article>
+      <article><span>PROMPT STORAGE</span><h3>每条完整 prompt 已落盘</h3><p>每个划分分别保存结构化输入、未来标签和完整 full prompt。prompt 提供编码版与要求 JSON 回答的 training-free 版；同一个模板生成，逐条核对一致。大文件目前位于本地工作区。</p></article>
+      </div>
+      <div class="orientation-note"><span>PROGRESS</span><p>T-M 指标与 loss、T1 全量导出已完成。T2 已固定随机清单，分层覆盖分析待补。T3 已准备训练/测试脚本，并完成 200 条 validation 的 persistence 对照（MSE 0.007323，MAE 0.04549）；Luna 与实际预训练 LLM 预测头实验尚未运行。T0 自然语言定位及 T4–T7 检索、Agent、增量验证仍待推进。</p></div>
+      <p class="table-note">剔除 1,697 条跨时间边界窗口后，共 363,318 条；三个划分的 parent event ID 无交集，但并不保证语义事件族独立。固定样本未按未来涨跌筛选。历史回测仍可能受模型预训练记忆影响。全量文件尚未上传 Hugging Face，现有活动特征下载入口保留原含义。</p>
+      <div class="hero-actions"><a class="button primary" href="../data/forecast_example_prompt.txt">查看完整英文 prompt</a><a class="button secondary" href="../data/polymarket_training_handoff.md">训练与 Luna 运行说明</a><a class="text-link" href="../data/forecast_prompt_export_report.json">全量 prompt 导出检查 →</a></div>
+    </section>
+
       <section class="section shell" id="pipeline">
         <div class="section-heading">
           <div><p class="eyebrow">01 / DATA PIPELINE</p><h2>现在的数据与图是怎样形成的？</h2></div>

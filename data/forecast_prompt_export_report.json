@@ -1,0 +1,25 @@
+{
+  "template": "econwm.forecasting.data.prompt; arm=full",
+  "columns": {
+    "input_prompt": "frozen LLM encoder text",
+    "training_free_prompt": "same history plus JSON response instruction"
+  },
+  "labels_included": false,
+  "splits": {
+    "train": {
+      "rows": 212393,
+      "verified_rows": 212393,
+      "bytes": 52369422
+    },
+    "validation": {
+      "rows": 13831,
+      "verified_rows": 13831,
+      "bytes": 3794707
+    },
+    "test": {
+      "rows": 137094,
+      "verified_rows": 137094,
+      "bytes": 36372140
+    }
+  }
+}

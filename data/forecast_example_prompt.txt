@@ -1,0 +1,36 @@
+TASK
+Predict the next 7 complete UTC days' closing traded prices for the same outcome.
+Use only the supplied history. Do not browse, call tools, inspect files, or retrieve other data.
+Prices are in [0,1]. Predict market prices, not the final event winner.
+MISSING means unavailable, not zero.
+
+TARGET
+Question: Will India win the 2025 Asia Cup?
+Priced outcome: Yes
+Frequency: one complete UTC day.
+Day 0 is the latest completed day; the forecast covers Day +1 through Day +7.
+
+HISTORY
+Rows run from Day -9 to Day 0 in chronological order.
+Volume fields = natural log(1 + USD volume / 1 USD).
+Trade count and relative volume = natural log(1 + value).
+Abnormal log volume is a signed historical activity score, kept as supplied.
+Shares are fractions in [0,1]. Price age = natural log(1 + age in hours).
+Each rolling feature uses information available by that row's day end.
+Columns: day,price,log_volume_day,log_trade_count,log_volume_7d,log_volume_30d,log_relative_volume_7d,abnormal_log_volume_7d,within_event_share,market_platform_share,event_platform_share,log_price_age_hours
+-9,0.73,3.49953328,1.79175947,5.18587629,6.14942937,0.637233897,0.286739608,0.661582852,1.85125572e-06,2.79822204e-06,2.49691756
+-8,0.53,4.39605281,1.60943791,5.41552246,6.30733312,1.42454511,1.35152549,0.690299793,4.04439627e-06,5.85889828e-06,1.87094711
+-7,0.73,4.36767413,2.56494936,5.68639892,6.440053,1.23388239,1.20300532,0.341671055,4.02812651e-06,1.17894872e-05,1.83502293
+-6,0.89,5.56582224,2.89037176,6.28977123,6.78759692,1.97438066,2.08949302,0.554800213,1.36873636e-05,2.46707973e-05,2.06189262
+-5,0.76,3.55134004,1.94591015,6.25492437,6.81610041,0.365013223,-0.314190226,1,1.66738415e-06,1.66738415e-06,2.29295554
+-4,0.75,4.15810153,2.19722458,6.36023109,6.88281689,0.614160878,0.35328147,0.215574809,3.01706633e-06,1.39954494e-05,2.00709484
+-3,0.92,7.10067052,3.13549422,7.47308045,7.6902723,2.75310611,2.96109664,0.813073264,4.33902118e-05,5.33656851e-05,2.07659026
+-2,0.9,1.763017,1.60943791,7.45746502,7.69144676,0.0190385412,-2.89972508,0.135941458,2.92893779e-07,2.15455817e-06,2.48017324
+-1,0.84,2.47317139,1.38629436,7.41666707,7.69210878,0.0429615836,-1.94149693,0.116025641,3.67916077e-07,3.17098939e-06,1.99386852
+0,0.78,6.5479182,3.25809654,7.73298718,7.96785194,1.36962823,2.40794722,0.819261384,1.75708259e-05,2.1447155e-05,0.313187363
+
+PREDICTION TARGET
+Return seven prices in chronological order. These are consecutive days, not different outcomes;
+the seven values do not need to sum to one.
+Forecast:
+Return one JSON object only: {"predicted_price": [p1,p2,p3,p4,p5,p6,p7]}. Replace each placeholder with a number in [0,1].
